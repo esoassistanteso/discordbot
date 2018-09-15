@@ -1,0 +1,24 @@
+{
+  "name": "[B]LoadFunctionOverwrites",
+  "temp": "",
+  "event-type": "1",
+  "_id": "LoadSubs",
+  "actions": [
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "// Make sure it only runs once!!\n//------------\n\nif(!globalVars(\"loadoverwrites\")){ \n  this.callNextAction(cache);\n  this.storeValue(true, 3,\"loadoverwrites\", cache);\n}",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "behavior": "0",
+      "interpretation": "0",
+      "code": "// Bot.onMessage & Bot.checkCommand Overwrite\n\nBot.onMessage = function(msg) {\n\tif(!msg.author.bot) {\n\t\ttry {\n\t\t\tthis.checkCommand(msg, function(checked) {\n\t\t\t\tif(!checked) Bot.onAnyMessage(msg);\n\t\t\t});\t\t\t\t\t\t\t\n\t\t} catch(e) {\n\t\t\tconsole.error(e);\n\t\t}\n\t}\n};\nconsole.log('[Overwrites](Server Prefixes) Bot.onMessage Loaded');\n\nBot.checkCommand = function(msg, callback) {\n\ttry {\n\t\tconst defaultTag = process.env.BOT_TAG || Files.data.settings.tag;\n\t\tconst separator = Files.data.settings.separator || '\\\\s+';\n\t\n\t\tlet content = msg.content;\n\t\tlet guildid   = (msg.guild && msg.guild.id) ? msg.guild.id : \"000\";\n\t\n\t\tcontent = content.split(new RegExp(separator))[0];\n\t\n\t\tBot.Subscriber.findOne({ serverid: guildid },function(err, subscriber){\n\t\t\tif (err) log(err.stack ? err.stack : err);\n\t\t\n\t\t\tconst tag = (subscriber && subscriber.tag) ? subscriber.tag : defaultTag;\n\t\t\tif(tag){\t\n\n\t\t\t\tif(msg.guild) msg.guild.tag = tag;\t\n\n\t\t\t\tif(content.startsWith(tag)) {\t\t\t\t\n\t\t\t\t\tlet command = content.substring(tag.length);\n\t\t\t\t\tif(command) {       \n\t\t\t\t\t\tif(!Bot._caseSensitive) {\n\t\t\t\t\t\t\tcommand = command.toLowerCase();\n\t\t\t\t\t\t}\n\t\t\t\t\t\tconst cmd = Bot.$cmds[command];\n\t\t\t\t\t\tif(cmd) {\t\t\t\t\n\t\t\t\t\t\t\t// metrics? get used commands here for metrics!\t\t\t\n\t\t\t\t\t\t\tActions.preformActions(msg, cmd);\n\t\t\t\t\t\t\tif(callback) callback(true);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\t\t\t\t\n\t\t\t\t}\n\t\t\t}\t\t\t\n\t\t\tif(callback) callback(false);\t\n\t\t});\n\t} catch (e) {\n\t\tconsole.error(e);\n\t}\n   \n};\nconsole.log('[Overwrites](Server Prefixes) Bot.checkCommand Loaded');\n",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    }
+  ]
+}

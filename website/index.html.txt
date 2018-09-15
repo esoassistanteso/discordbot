@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body class="text-center">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="neon.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <!-- Script: Make my navbar transparent when the document is scrolled to top -->
+  <script src="js/navbar-ontop.js"></script>
+  <!-- Script: Animated entrance -->
+  <script src="js/animate-in.js"></script>
+  <!-- Navbar -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- PAGE settings -->
+ <link rel="icon" href="https://i.imgur.com/zQadp8w.png">
+  <title>ESO Assistant - Discord Bot</title>
+  <meta name="description" content="ESO Assistant is a Discord Bot with all your information needs for the Elder Scrolls Online">
+  <meta name="keywords" content="The Elder Scrolls Online, ESO, ESO Assistant, Discord, Discord Bot">
+  <!-- CSS dependencies -->
+  <link rel="stylesheet" href="neon.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"> 17
+  <!-- Script: Make my navbar transparent when the document is scrolled to top -->
+  <script src="js/navbar-ontop.js"></script>
+  <!-- Script: Animated entrance -->
+  <script src="js/animate-in.js"></script>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+  <!-- JavaScript dependencies -->
+    <div class="container">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation"> 25
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbar2SupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-2"> </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#speakers">Screen Shots</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#schedule">
+              <b>Links</b>
+            </a>
+          </li>
+        </ul>
+        <a class="btn navbar-btn mx-2 btn-outline-primary" href="https://discordapp.com/api/oauth2/authorize?client_id=411786681935724546&amp;permissions=8&amp;scope=bot">ESO Assistant</a> 42 </div> 43 </div> 44 </nav> 45
+  <!-- Cover -->
+  <!-- Intro section -->
+  <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbar2SupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#speakers">Screen Shots</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="#schedule">
+              <b>Links</b>
+            </a>
+          </li>
+        </ul>
+        <a class="btn navbar-btn mx-2 btn-outline-primary" href="https://discordapp.com/api/oauth2/authorize?client_id=411786681935724546&amp;permissions=8&amp;scope=bot">ESO Assistant</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Cover -->
+  <!-- Intro section -->
+  <div class="d-flex align-items-center py-5 cover section-fade-in-out" style="background-image: url(&quot;https://i.imgur.com/kN1wCqU.jpg&quot;);">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 mt-5">
+          <img class="mb-4" src="https://i.imgur.com/zQadp8w.png" width="100" >
+          <h1 class="mb-7 display-3">
+            <b>ESO Assistant</b>
+          </h1>
+          <h3 class="mb-2">
+            <b>An&nbsp; Elder Scrolls Online Discord Bot filled with useful Information</b>
+          </h3>
+        </div>
+      </div>
+      <div class="row py-3">
+        <div class="col-md-15"> </div>
+        <a href="http://esoassistant.com" style="font-weight: bold;"> </a>
+      </div>
+      <div class="row">
+        <div class="col-md-12"> </div>
+      </div>
+      <i class="d-block fa fa-angle-down pt-5 fa-3x"></i>
+    </div>
+  </div>
+  <div class="py-5 section-fade-in" style="background-image: url(&quot;https://i.imgur.com/1Q8srrK.jpg&quot;);">
+    <div class="container p-4 my-5">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="mb-3 text-primary">About the Discord Bot</h1>
+          <p>TYPE !HELP TO GET A LIST OF COMMANDS. BOT INFO OR ESO ASSISTANT NO PREFIX NEEDED TO GET STATS​ ABOUT ESO ASSISTANT ESO Assistant is a Discord Bot to pair with the use of The Elder Scrolls Online to improve and make your game experience more
+            enjoyable. With many commands that get you the info you want and need to get started with quests and pricing and just having fun. To get a full list of commands come to our Discord server or follow the instructions bellow.</p>
+          <a href="#schedule"
+            class="btn btn-lg m-2 btn-outline-primary">Get ESO Assistant</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Speakers -->
+  <div class="py-5" id="speakers">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h1>
+            <b>Screen Shots</b>
+          </h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+            <img src="https://media.discordapp.net/attachments/452161247903875072/454916416181633024/QNB5q1l0RH_hOmKzwlm6pw.png" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">
+              <b>Pledges and Scores</b>
+            </h3>
+            <p class="text-muted">Lots of commands, and more being worked on all the time!</p>
+          </a>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <img src="https://media.discordapp.net/attachments/452161247903875072/454913487081177088/RQg5uTiBQQWlmkSC6yQY_Q.png" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">!server</h3>
+            <p class="text-muted">Shows you the server status also now in subscribed</p>
+          </a>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <img src="https://media.discordapp.net/attachments/452161247903875072/454911994173063168/06aCOxBqQgysAMlRB6N_UQ.png?width=622&amp;height=692" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">
+              <b>!subscribe</b>
+            </h3>
+            <p class="text-muted">Announments from the subscribed channel</p>
+          </a>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <img src="https://images-ext-1.discordapp.net/external/sF8E9o1XbuQlcGPj_Nvt-u5tpzalX6OdGSDpVDGyKIU/https/image.prntscr.com/image/H51xxyDBTxiZjU0I2n9Jqw.png" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">
+              <b>Music!</b>
+            </h3>
+            <p class="text-muted">!play, !pause, !skip, !resume and !stop</p>
+          </a>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <img src="https://media.discordapp.net/attachments/452161247903875072/454915385062326292/Wu72jLpoT-eZ80ate_uhdw.png?width=567&amp;height=692" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">Fun commands</h3>
+            <p class="text-muted">Just some random commands people thought would be fun</p>
+          </a>
+        </div>
+        <div class="col-lg-4 col-md-6">           <img src="https://media.discordapp.net/attachments/452161247903875072/454914036203520000/I6WeSBacRuSR7ZGmcSzpZQ.png" class="center-block img-fluid my-3 shadowed" width="300">
+            <h3 class="mb-0">
+              <b>#bot-log</b>
+            </h3>
+            <p class="text-muted">if you create a bot-log channel you get some useful Admin type info. Good for monitoring members.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Schedule -->
+  <div class="py-5 section-fade-in-out" id="schedule" style="background-image: url(&quot;https://i.imgur.com/robCOls.jpg&quot;);">
+    <div class="container my-5">
+      <div class="row">
+        <div class="col-12">
+          <h1>Links</h1>
+        </div>
+      </div>
+      <div class="row text-center">
+        <div class="col-md-4">
+          <div class="card p-5 m-1 bg-light">
+            <div class="card-block">
+              <p class="lead">
+                <i>Become a Patreon</i>
+              </p>
+            </div>
+            <div class="card-block my-3">
+              <h1>
+                <img class="mb-5" src="https://i.imgur.com/XxeHZ5I.png" width="100"> </h1>
+              <p>Just getting started, you can help and join us on this adventure and test the latest and most current commands. As a supporter of ESO Assistant, you will have access to secret commands that you can share with your friends, help with testing
+                and a special rank in the ESO Assistant Discord.</p>
+            </div>
+            <div class="card-block">
+              <a href="https://www.patreon.com/esoassistant" class="btn btn-dark">Support Us</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-5 m-1 bg-info">
+            <div class="card-block">
+              <p class="lead">
+                <i>Our Discords Server</i>
+              </p>
+            </div>
+            <div class="card-block my-3">
+              <h1>
+                <img class="mb-5" src="https://i.imgur.com/51Kc6m0.png" width="100"> </h1>
+              <p>Join our Discord Server and give us a test run and see how ESO Assistant works or just to hang out.</p>
+            </div>
+            <div class="card-block">
+              <a href="https://discord.gg/TcEKF8z" class="btn btn-light">
+                <b>JOIN</b>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-5 m-1 text-white bg-info">
+            <div class="card-block">
+              <p class="lead">
+                <i>ESO Assistant</i>
+              </p>
+            </div>
+            <div class="card-block my-4">
+              <img class="mb-5" src="https://i.imgur.com/zQadp8w.png" width="100">
+              <p>ESO Assistant You can add me to your Discord Guild by clicking my image above. I look forward to severing you and improving your gaming experience!</p>
+            </div>
+            <div class="card-block">
+              <a href="https://discordapp.com/oauth2/authorize?client_id=411786681935724546&amp;permissions=8&amp;scope=bot" class="btn btn-light">
+                <b>GET ME</b>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"> </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1 class="mb-4">Credited Sites for their information!</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2" draggable="true">
+          <a href="https://eso-sets.com/">
+            <img class="center-block img-fluid d-block mx-auto" src="https://i.imgur.com/uBWAQzb.png" width="80" height="80"> </a>
+        </div>
+        <div class="col-md-2">
+          <a href="https://eso-database.com/en/">
+            <img class="center-block img-fluid d-block mx-auto" src="https://i.imgur.com/EOvT4nz.png" width="80" height="80"> </a>
+        </div>
+        <div class="col-md-2" draggable="true">
+          <a href="https://us.tamrieltradecentre.com/pc/Trade">
+            <img class="center-block img-fluid d-block mx-auto" src="https://us.tamrieltradecentre.com/Logo.png" width="70" height="60"> </a>
+        </div>
+        <div class="col-md-2" draggable="true">
+          <a href="http://en.uesp.net/wiki/Main_Page">
+            <img class="center-block img-fluid d-block mx-auto" src="https://i.imgur.com/CrC76ZQ.png" width="80" height="80"> </a>
+        </div>
+        <div class="col-md-2" draggable="true">
+          <a href="http://benevolentbowd.ca">
+            <img class="center-block img-fluid d-block mx-auto" src="https://i.imgur.com/j30RZZQ.png" width="80" height="80"> </a>
+        </div>
+        <div class="col-md-2" draggable="true">
+          <a href="https://www.elderscrollsonline.com/en-us/home">
+            <img class="center-block img-fluid d-block mx-auto" src="https://i.imgur.com/JyI3izV.png" width="80" height="80"> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <p>Credited Sites for their information We are in now way affiliated with any of these awesome sites! All rights are theirs 100% and theirs alone. We just bring the open information we find on these awesome sites to you for everyone to enjoy! Please
+            be sure to support them and visit their links!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Commands</h5>
+                <small class="text-muted"></small>
+              </div>
+              <p class="mb-1">unsubscribe, subscribe, help, addons, support, admin, Botinfo, lewdhelp, Announce, say, serverinfo, UserInfo, pm, Purge, delete, ban, kick, bugreport, suggest, leveloff, levelon, roll, Coinflip, getgud, fortnite, dadjoke, fact, ytc, meow,
+                woof, meme, play, pause, skip, resume, stop, Kevduittwitch, botstatus, invite, youtube, google, vote, poll, pen, spellpen, vSO, Zhaj, vmolpositioning, vmolofftank, vmol, redcp, vSO2, run, vHoF, vHRC, vAAhm, vAA2, vAA, vAS, monster, bait,
+                Level, weekly, lb, lbc, skill, randomraid, price, Set, quest, server, summerset, randomtrial, luxury, golden, pledge, character, vma, top, patch, kevduit, Deltia, Nefas, Woeler, Dottz, Ninja614, Mapurr, Gilliamtherogue, Alcast, Argonian,
+                Nord, Orsimer, Redguard, Imperial, Khajiit, Bosmer, Dunmer, Altmer, Brenton, euweekly, eulb, euprice, eulbc</p>
+              <small class="text-muted">List of usable commands</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Call to action -->
+  <!-- Footer -->
+  <footer class="text-md-left text-center p-4">
+    <div class="container">
+      <div class="row">
+        <div class="my-3 col-lg-4 col-md-4">
+          <h3>
+            <center>
+            </center>
+          </h3>
+        </div>
+        <div class="my-3 col-lg-4 col-md-4">
+          <!-- start sw-rss-feed code -->
+          <script type="text/javascript">
+            <!-- 
+            rssfeed_url = new Array(); 
+            rssfeed_url[0]="http://files.elderscrollsonline.com/rss/en-us/eso-rss.xml";  
+            rssfeed_frame_width="230"; 
+            rssfeed_frame_height="260"; 
+            rssfeed_scroll="on"; 
+            rssfeed_scroll_step="6"; 
+            rssfeed_scroll_bar="off"; 
+            rssfeed_target="_blank"; 
+            rssfeed_font_size="12"; 
+            rssfeed_font_face=""; 
+            rssfeed_border="on"; 
+            rssfeed_css_url=""; 
+            rssfeed_title="on"; 
+            rssfeed_title_name=""; 
+            rssfeed_title_bgcolor="#55a0ff"; 
+            rssfeed_title_color="#000"; 
+            rssfeed_title_bgimage="http://www.esohead.com/static/esohead/image/maps/grahtwood/grahtwood_base/2/1_0.png"; 
+            rssfeed_footer="on"; 
+            rssfeed_footer_name="ESO Assistant"; 
+            rssfeed_footer_bgcolor="#fff"; 
+            rssfeed_footer_color="#fff"; 
+            rssfeed_footer_bgimage="https://vignette.wikia.nocookie.net/elderscrolls/images/2/20/Hammerfell_ESO_Map.png/revision/latest?cb=20160917013155"; 
+            rssfeed_item_title_length="50"; 
+            rssfeed_item_title_color="#fff"; 
+            rssfeed_item_bgcolor="#000"; 
+            rssfeed_item_bgimage=""; 
+            rssfeed_item_border_bottom="on"; 
+            rssfeed_item_source_icon="off"; 
+            rssfeed_item_date="on"; 
+            rssfeed_item_description="on"; 
+            rssfeed_item_description_length="120"; 
+            rssfeed_item_description_color="#fff"; 
+            rssfeed_item_description_link_color="#55a0ff"; 
+            rssfeed_item_description_tag="on"; 
+            rssfeed_no_items="0"; 
+            rssfeed_cache = "42295f3a234d54eb01bc6fe55be1f487"; 
+            //-->
+          </script>
+          <script type="text/javascript" src="//feed.surfing-waves.com/js/rss-feed.js"></script>
+          <div style="text-align:right; width:230px;">The Elden Scrolls Online
+            <a href="http://www.surfing-waves.com" rel="noopener" target="_blank" style="color:#fff;font-size:10px">- News Feed</a>
+          </div>
+          <!-- end sw-rss-feed code -->
+        </div>
+        <div class="my-3 col-lg-4 col-md-4">
+          <!-- start sw-rss-feed code -->
+          <script type="text/javascript">
+            <!-- 
+            rssfeed_url = new Array(); 
+            rssfeed_url[0]="http://www.esoui.com/rss/latest.xml";  
+            rssfeed_frame_width="230"; 
+            rssfeed_frame_height="260"; 
+            rssfeed_scroll="on"; 
+            rssfeed_scroll_step="6"; 
+            rssfeed_scroll_bar="off"; 
+            rssfeed_target="_blank"; 
+            rssfeed_font_size="12"; 
+            rssfeed_font_face=""; 
+            rssfeed_border="on"; 
+            rssfeed_css_url=""; 
+            rssfeed_title="on"; 
+            rssfeed_title_name=""; 
+            rssfeed_title_bgcolor="#55a0ff"; 
+            rssfeed_title_color="#000"; 
+            rssfeed_title_bgimage="http://www.esohead.com/static/esohead/image/maps/craglorn/craglorn_base/2/1_1.png"; 
+            rssfeed_footer="on"; 
+            rssfeed_footer_name="ESO Assistant"; 
+            rssfeed_footer_bgcolor="#fff"; 
+            rssfeed_footer_color="#fff"; 
+            rssfeed_footer_bgimage="https://vignette.wikia.nocookie.net/elderscrolls/images/2/20/Hammerfell_ESO_Map.png/revision/latest?cb=20160917013155"; 
+            rssfeed_item_title_length="50"; 
+            rssfeed_item_title_color="#fff"; 
+            rssfeed_item_bgcolor="#000"; 
+            rssfeed_item_bgimage=""; 
+            rssfeed_item_border_bottom="on"; 
+            rssfeed_item_source_icon="off"; 
+            rssfeed_item_date="on"; 
+            rssfeed_item_description="on"; 
+            rssfeed_item_description_length="120"; 
+            rssfeed_item_description_color="#fff"; 
+            rssfeed_item_description_link_color="#55a0ff"; 
+            rssfeed_item_description_tag="on"; 
+            rssfeed_no_items="0"; 
+            rssfeed_cache = "42295f3a234d54eb01bc6fe55be1f487"; 
+            //-->
+          </script>
+          <script type="text/javascript" src="//feed.surfing-waves.com/js/rss-feed.js"></script>
+          <div style="text-align:right; width:230px;">ESOUI
+            <a href="http://www.surfing-waves.com" rel="noopener" target="_blank" style="color:#fff;font-size:10px">- Latest Stuff and Thangs</a>
+          </div>
+          <!-- end sw-rss-feed code -->
+        </div>
+      </div>
+      <div class="row"> </div>
+      <div class="py-5">
+        <div class="container">
+          <div class="row"> </div>
+ <center><img src="https://discordbots.org/api/widget/411786681935724546.svg" alt="ESO Assistant" width="300" hight="70"></center>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- JavaScript dependencies -->
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-6">
+          <p style="font-size:xx-small;" id="createdby" class="border justify-content-start align-items-start align-self-start ark animate-in-down lead text-center text-uppercase border-primary d-inline-flex flex-row text-white">Created By: &nbsp;
+            <b>
+              <a href="https://forums.elderscrollsonline.com/en/profile/MagicalSociety">
+                <img src="https://images.discordapp.net/avatars/314216283484717057/3ab8377ad2d7260b9dafd15ced957f78.png" width="15">
+                <span>Ahlfs
+                  <i>#1337 &nbsp;</i>
+                </span>
+              </a>
+            </b>
+            <b>
+              <a href="https://forums.elderscrollsonline.com/en/profile/MrsAhlfs">
+                <img src="https://images.discordapp.net/avatars/314523942130024449/d9a2c6696137cabd43c230b89061c637.png" width="15">
+                <span>Mrs.Ahlfs
+                    <i>#7736</i>
+                  </span>
+              </a>
+            </b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p class="text-muted">ESO Assistant&nbsp;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <!-- Script: Smooth scrolling between anchors in a same page -->
+  <pingendo onclick="window.open('https://discordapp.com/oauth2/authorize?client_id=411786681935724546&permissions=8&scope=bot', '_blank')" style="cursor:pointer;position: fixed;bottom: 10px;right:10px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:250px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white"
+    >ESO Assistant&nbsp;&nbsp;
+    <img src="https://i.imgur.com/zQadp8w.png" class="d-block" alt="ESO Assistant Logo" height="25"> </pingendo>
+</body>
+
+</html>

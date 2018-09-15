@@ -1,0 +1,4 @@
+edit index - EDIT ME.html
+when you're about to deploy make sure index.ejs contains the same html as index - EDIT ME.html
+
+-wrex

@@ -1,0 +1,23 @@
+{
+  "name": "eval",
+  "permissions": "ADMINISTRATOR",
+  "restriction": "0",
+  "_id": "FFBqW",
+  "actions": [
+    {
+      "info": "1",
+      "infoIndex": "1",
+      "storage": "1",
+      "varName": "evalme",
+      "name": "Store Command Params"
+    },
+    {
+      "behavior": "0",
+      "interpretation": "0",
+      "code": "// this makes sure the command only works on the ahlfs-owns\nif(msg.author.id == \"314216283484717057\" || msg.author.id == \"211607587232153600\") {\n\ttry {\n\n          let evald = eval(tempVars(\"evalme\"))\n          msg.channel.send(new Date() + \"\\n\" + msg.author.username + \":\\n\\n\" + evald)\n          \n\t} catch (error) {\n            msg.channel.send(error)\n\t    console.error(\"Eval Error: \" + error)\t\n\t}   \n}\n",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    }
+  ]
+}

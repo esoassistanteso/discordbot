@@ -1,0 +1,22 @@
+{
+  "name": "^(esoa_prefix)",
+  "permissions": "KICK_MEMBERS",
+  "restriction": "1",
+  "_id": "callsPrefix",
+  "actions": [
+    {
+      "info": "0",
+      "infoIndex": "1",
+      "storage": "1",
+      "varName": "tag",
+      "name": "Store Command Params"
+    },
+    {
+      "source": "prefix",
+      "type": "true",
+      "name": "Call Command/Event"
+    }
+  ],
+  "_aliases": [],
+  "comType": "2"
+}

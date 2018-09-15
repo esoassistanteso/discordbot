@@ -1,0 +1,33 @@
+{
+  "name": "prefix",
+  "permissions": "KICK_MEMBERS",
+  "restriction": "1",
+  "_id": "prefix",
+  "actions": [
+    {
+      "info": "0",
+      "infoIndex": "1",
+      "storage": "1",
+      "varName": "tag",
+      "name": "Store Command Params"
+    },
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "// June 6th Changes\n// Make sure the subscribers variable exists, then load subscribers\nif(Bot.Subscriber) \n{\n  this.callNextAction(cache);\n}",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "const defaultTag = process.env.BOT_TAG || Files.data.settings.tag;\n\nconst log_channel = \"449627638827450378\"; // #subscriptons\nconst newTag = tempVars(\"tag\");\n\n\nfunction log(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\nfunction reply(str) {\n    const channel = client.channels.get(log_channel);\n  \n    let canSendMessage = channel.permissionsFor(client.user).has(\"SEND_MESSAGES\");\n\n    if(canSendMessage){\n        msg.channel.send(str)\n        console.log(str);\n    }else{                          \n        channel.send(\"[SERVER PREFIX] Bot doesn't have SEND_MESSAGE permissions on server (\"+server.id+\") \" + server.name);  \n        msg.reply(\"I dont have SEND_MESSAGE permissions here! Please grant me permissions!\");\n    }  \n}\n\nBot.Subscriber.findOne({ serverid: server.id, tag: { $exists: true } }, function(err, subscriber) {\t\t\t\n\tif (err) log(err.stack ? err.stack : err);\n\n\tlet hasTag = (subscriber && subscriber.tag);\n\tconst tag = (hasTag ? subscriber.tag : defaultTag);\n\n\tif(!newTag){\t\n\t\treturn reply(\"The current prefix for this server is `\" + tag + \"`\");\n\t}\n    \t   \n\tif(tag == newTag){\n\t\treply(\"Prefix is already set to `\" + tag +\"` Do `esoa_prefix [newprefix]` to change it.\");\t \n\t}else{\n\t\tconsole.dir(subscriber)\n\t\tif(!subscriber){\n\t\t\tsubscriber = new Bot.Subscriber({ \n\t\t\t\tserverid: server.id, \n\t\t\t\tchannelid: \"0\",\n\t\t\t\tsubbed: false,\n\t\t\t\ttag: newTag \n\t\t\t});\t\t\t\t\t\t\t\n\t\t}\n\n\t\tserver.tag     = newTag;\n\t\tsubscriber.tag = newTag;\n  \n\t\tsubscriber.save(function(err) {\n\t\t\tif (err) log(err.stack ? err.stack : err);    \n\t\t\t\treply(\"Prefix has been changed to `\" + newTag +\"`.\");\t\t\n\t\t}); \t\t\t\n\t}                                          \n});",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    }
+  ],
+  "_aliases": [],
+  "comType": "0"
+}

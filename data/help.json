@@ -1,0 +1,7 @@
+[
+  {
+    "name": "subscribe",
+    "desc": "Do `%prefix%subscribe` in a channel of your choice ( that the bot has access to ) and the latest ESO news will be put into that channel whenever something important happens!",
+    "flag": false
+  }
+]

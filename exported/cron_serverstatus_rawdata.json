@@ -1,0 +1,73 @@
+{
+  "name": "cron_serverstatus",
+  "permissions": "NONE",
+  "restriction": "0",
+  "_id": "*/3 * * * *",
+  "actions": [
+    {
+      "url": "https://esoserverstatus.net/",
+      "storage": "1",
+      "varName": "mypage",
+      "name": "Store HTML From Webpage"
+    },
+    {
+      "debugMode": "0",
+      "xpath": "//h4/b/node() | //span/b/node()",
+      "source": "1",
+      "sourceVarName": "mypage",
+      "storage": "1",
+      "varName": "ttc",
+      "name": "Parse From Stored Webpage"
+    },
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "let statusArray = [\n    tempVars(\"ttc\")[1],\n    tempVars(\"ttc\")[3],\n    tempVars(\"ttc\")[5],\n    tempVars(\"ttc\")[7],\n    tempVars(\"ttc\")[9],\n    tempVars(\"ttc\")[11],\n    tempVars(\"ttc\")[13]\n];\n\nBot.Saved.get(\"server_status\", function(err, replies) {\n    let reply = replies.split(\"|\");\n\n    if(replies.length != statusArray.join(\"|\").length){\n        let newStatusArray = [];\n\n        for(var index in statusArray){\n            let item = statusArray[index];\n            if(statusArray[index] != reply[index]){\n                newStatusArray.push(item.replace(\"Online\",\"**Online** \").replace(\"Offline\",\"**Offline** \"));\n            }else{\n                newStatusArray.push(false);\n            }\n        }\n        Actions.storeValue(newStatusArray, 1, \"ttc\", cache);     \n        Actions.callNextAction(cache);\n        Bot.Saved.set(\"server_status\", statusArray.join(\"|\"));\n    }\n});",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "title": "Server Status Change",
+      "author": "ESO Assistant",
+      "color": "#2256bf",
+      "timestamp": "false",
+      "url": "https://esoserverstatus.net/",
+      "authorIcon": "https://i.imgur.com/zQadp8w.png",
+      "imageUrl": "",
+      "thumbUrl": "",
+      "storage": "1",
+      "varName": "ttcprice",
+      "name": "Create Embed Message"
+    },
+    {
+      "storage": "1",
+      "varName": "ttcprice",
+      "fieldName": "Server Status",
+      "message": "${(function(){ return tempVars(\"ttc\")[3]  ? tempVars(\"ttc\")[3]   + \"[PC/Mac] North-American Megaserver\" : \"\"})()} \n${(function(){ return tempVars(\"ttc\")[5]  ? tempVars(\"ttc\")[5]   + \"[PC/Mac] Public Test Server\"        : \"\"})()}  \n${(function(){ return tempVars(\"ttc\")[1]  ? tempVars(\"ttc\")[1]   +\"[PC/Mac] European Megaserver\"        : \"\"})()} \n${(function(){ return tempVars(\"ttc\")[11] ? tempVars(\"ttc\")[11]  +\"[PS4] European Megaserver\"           : \"\"})()}  \n${(function(){ return tempVars(\"ttc\")[13] ? tempVars(\"ttc\")[13]  +\"[PS4] North-American Megaserver\"     : \"\"})()} \n${(function(){ return tempVars(\"ttc\")[9]  ? tempVars(\"ttc\")[9]   +\"[XBOX One] North-American Megaserver\": \"\"})()}  \n${(function(){ return tempVars(\"ttc\")[7]  ? tempVars(\"ttc\")[7]   +\"[XBOX One] European Megaserver\"      : \"\"})()}  ",
+      "inline": "1",
+      "name": "Add Embed Field"
+    },
+    {
+      "storage": "1",
+      "varName": "ttcprice",
+      "message": "via esoserverstatus.net  |  ESO Assistant",
+      "footerIcon": "https://i.imgur.com/3bGaoaJ.png",
+      "name": "Set Embed Footer"
+    },
+    {
+      "behavior": "0",
+      "interpretation": "0",
+      "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"ttcprice\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers! Error:\" + err))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    }
+  ],
+  "comType": "0",
+  "_aliases": [
+    "week",
+    "trials"
+  ],
+  "event-type": "0"
+}

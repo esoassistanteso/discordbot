@@ -1,0 +1,40 @@
+{
+  "name": "[A]LoadDatabase",
+  "temp": "",
+  "event-type": "1",
+  "_id": "LoadSubs",
+  "actions": [
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "// Make sure it only runs once!!\n//------------\n\nif(!globalVars(\"loaddatabase\")){ \n  this.callNextAction(cache);\n  this.storeValue(true, 3,\"loaddatabase\", cache);\n}",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "// This function loads the database \n// and also filters subscribers to make sure\n// they still exist\n\n// SETTINGS\nconst log_channel = \"449627638827450378\"; // #subscriptons\n\nconst token = \"mongodb://heroku_w28d3f0r:9dkkh2k2sbgc34pg0csiv1omsm@ds235850.mlab.com:35850/heroku_w28d3f0r\";\n\n// Dont change anything below this without knowing what to do!\n\nconsole.log(\"[DATABASE] Loading database..\")\n\nconst log = function(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\nconst mongoose = require('mongoose');\n\nBot.Subscriber = mongoose.model('Subscriber', {\n    serverid: String,\n    channelid: String,\n    subbed: Boolean,\n    tag: String\n})\n\nmongoose.connection.on('connected', x => console.log(\"[DATABASE] Connected to Database\"));\nmongoose.connection.on('error', x => console.error(\"[DATABASE] ERROR: \" + x));\nmongoose.connection.on('disconnected', x => console.log(\"[DATABASE] Disconnected From Database\"));\n\nmongoose.connect(token);\n\n\n// add subbed var if missing\nBot.Subscriber.find({ subbed: { $exists: false } }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)   \n    if(subscribers){\n        subscribers.forEach(sub => {\n            if(sub){\n                sub.subbed = true;\n                sub.save((err) => { if (err) log(err.stack ? err.stack : err); });\t\n            }\n        })\n    }   \n});\n\n// add prefix var if missing\nBot.Subscriber.find({ tag: { $exists: false } }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)   \n    if(subscribers){\n        subscribers.forEach(sub => {\n            if(sub){\n                sub.tag = process.env.BOT_TAG || Files.data.settings.tag;\n                sub.save((err) => { if (err) log(err.stack ? err.stack : err); });\t\n            }\n        })\n    }   \n});\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)   \n    log(\"[DATABASE] Loaded \" + subscribers.length + \" Subscribers.\")\n    this.callNextAction(cache);\n}.bind(this));\n",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "behavior": "1",
+      "interpretation": "0",
+      "code": "// This function loads the saved variables\n\n// SETTINGS\nconst log_channel = \"449627638827450378\"; // #subscriptons\n\nconst token = 'redis://h:p0a35e12bf35000ea4357514137bbe14c73bb1c67a292367655fb73121c29a601@ec2-52-202-215-145.compute-1.amazonaws.com:14649';\n\n// Dont change anything below this without knowing what to do!\n\nconsole.log(\"[REDIS] Loading Variables\")\n\nconst log = function(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\nBot.Redis = require(\"redis\");\nBot.Saved = Bot.Redis.createClient(token)\n\nBot.Saved.on(\"error\", function (err) {\n    console.log(\"Error \" + err);\n});\n\nBot.Saved.on(\"ready\", function (err) {\n    if (err) return console.log(err);   \n    Bot.Saved.keys('*', function (err, keys) {\n      if (err) return console.log(err);\n      log(\"[REDIS] Loaded \" + keys.length + \" Saved Variables.\")\n    });  \n});\nthis.callNextAction(cache);\n      \n",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    },
+    {
+      "behavior": "0",
+      "interpretation": "0",
+      "code": "",
+      "storage": "0",
+      "varName": "",
+      "name": "Run Script"
+    }
+  ]
+}

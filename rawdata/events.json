@@ -1,0 +1,1683 @@
+[
+  null,
+  {
+    "name": "PrettyJson",
+    "temp": "",
+    "event-type": "1",
+    "_id": "LoadSubs",
+    "actions": [
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// Make sure it only runs once!!\n//------------\n\nif(!globalVars(\"prettyjson\")){ \n  this.callNextAction(cache);\n  this.storeValue(true, 3,\"prettyjson\", cache);\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "require('fs').writeFileSync('./data/commands.json', JSON.stringify(require('./data/commands.json'),null,2))\nrequire('fs').writeFileSync('./data/events.json', JSON.stringify(require('./data/events.json'),null,2))",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "----------LOADERS ----------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "dJtJk",
+    "actions": []
+  },
+  {
+    "name": "LoadDatabase",
+    "temp": "",
+    "event-type": "1",
+    "_id": "LoadSubs",
+    "actions": [
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// Make sure it only runs once!!\n//------------\n\nif(!globalVars(\"loaddatabase\")){ \n  this.callNextAction(cache);\n  this.storeValue(true, 3,\"loaddatabase\", cache);\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// This function loads the database \n// and also filters subscribers to make sure\n// they still exist\n\n// SETTINGS\nconst log_channel = \"449627638827450378\"; // #subscriptons\n\nconst token = \"mongodb://heroku_w28d3f0r:9dkkh2k2sbgc34pg0csiv1omsm@ds235850.mlab.com:35850/heroku_w28d3f0r\";\n\n// Dont change anything below this without knowing what to do!\n\nconsole.log(\"[DATABASE] Loading database..\")\n\nconst log = function(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\nconst mongoose = require('mongoose');\n\nconst Subscriber =  Bot.Subscriber = mongoose.model('Subscriber', {\n    serverid: String,\n    channelid: String,\n    subbed: Boolean\n})\n\nmongoose.connection.on('connected', x => console.log(\"[DATABASE] Connected to Database\"));\nmongoose.connection.on('error', x => console.error(\"[DATABASE] ERROR: \" + x));\nmongoose.connection.on('disconnected', x => console.log(\"[DATABASE] Disconnected From Database\"));\n\nmongoose.connect(token);\n\n\n// add subbed var if missing\nBot.Subscriber.find({ subbed: { $exists: false } }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)   \n    if(subscribers){\n        subscribers.forEach(sub => {\n            if(sub){\n                console.log(sub.subbed)\n\n                sub.subbed = true;\n\n                sub.save((err) => { if (err) log(err.stack ? err.stack : err); });\t\n            }\n        })\n    }   \n});\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)   \n    log(\"[DATABASE] Loaded \" + subscribers.length + \" Subscribers.\")\n    this.callNextAction(cache);\n}.bind(this));\n",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// This function loads the saved variables\n\n// SETTINGS\nconst log_channel = \"449627638827450378\"; // #subscriptons\n\nconst token = 'redis://h:p0a35e12bf35000ea4357514137bbe14c73bb1c67a292367655fb73121c29a601@ec2-52-202-215-145.compute-1.amazonaws.com:14649';\n\n// Dont change anything below this without knowing what to do!\n\nconsole.log(\"[REDIS] Loading Variables\")\n\nconst log = function(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\nBot.Redis = require(\"redis\");\nBot.Saved = Bot.Redis.createClient(token)\n\nBot.Saved.on(\"error\", function (err) {\n    console.log(\"Error \" + err);\n});\n\nBot.Saved.on(\"ready\", function (err) {\n    if (err) return console.log(err);\n\n    Bot.Saved.keys('*', function (err, keys) {\n      if (err) return console.log(err);\n      log(\"[REDIS] Loaded \" + keys.length + \" Saved Variables.\")\n    });  \n});\n\n      \n",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "LoadWebserver",
+    "temp": "",
+    "event-type": "1",
+    "_id": "fQQZm",
+    "actions": [
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// This script makes sure that it actually only runs once\n// put others after this Run Script!\nif(!globalVars(\"webhook_server\")){\n    this.callNextAction(cache)\n    this.storeValue(\"started!!\", 3, \"webhook_server\", cache)\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "const log_channel = \"449627638827450378\"; // #subscriptons\n\nrequire('dotenv').config();\nconst express = require('express');\n\nconst app = express();\n\nvar cookieParser = require('cookie-parser');\n\nconst bodyParser = require('body-parser');\napp.use(bodyParser.json());\napp.use(bodyParser.text());\napp.use(bodyParser.urlencoded({extended: true}));\n\nvar cors = require('cors');\napp.use(cors());\n\nconst path = require('path');\n\nBot.sendToLogChannel = function(toSend){\n    let channel = client.channels.get(log_channel);\n    if(channel) channel.send(toSend).catch(err => console.error(err.stack ? err.stack : err))    \n}\n\n\napp.use(express.static(path.join(__dirname, 'website', 'public')));\napp.use(cookieParser());\n\napp.set('views', path.join(__dirname, 'website', 'views'));\napp.set('view engine', 'ejs');\napp.set('json spaces', 4);\n\n\napp.get('/', function(req, res) {\t\n    res.render('index');\t\n});\n\n\n\n// ------------------------ WEBHOOOOKIES --------------------------\n\n\n// endpoints\napp.post('/' + process.env.TWITTER_TOKEN + '/twitter', function (req, res) { \n    res.status(200).send({message: \"Thats the old way! Dont use it!\", status: \"OK\" }); \n})\n\n\n// endpoints\napp.post('/' + process.env.TWITTER_TOKEN + '/' + process.env.TOKEN  +'/twitter', function (req, res) {\n \n    try {\n        if (!req.body) {\n            return res.status(400).send('Bad Request')\n        }\n    \n        let out = req.body.message ? req.body.message.toString() : req.body\n\n        client.channels.get(log_channel).send(\"Sending Incoming Webhook to subscribers \"+ out)  \n        \n        Bot.Subscriber.find({subbed: true}, function(err, subscribers) {\n            if (err) log(err.stack ? err.stack : err)\n\n            if (subscribers.length > -1) {\n                for (var index = 0; index < subscribers.length; index++) {                        \n                    (function(index) {\n                        setTimeout(function() {\n                            let subscriber = subscribers[index];\n\n                            let channelid = subscriber.channelid;\n                            let serverid = subscriber.serverid;\n\n                            let channel = client.channels.get(channelid);\n\n                            if(channel){                                                 \n                                channel.send(out).catch(err => console.error(err.stack ? err.stack : err))                       \n                            }else{\n         \n                            }\n                        }, 2000 * index);\n                    })(index);\n                }                           \n            }         \n        });\n    \n        // the most basic response\n        res.status(200).send({message: req.body, status: \"OK\" });\n\n    } catch (error) {\n        res.status(200).send({message: error, status: \"ERROR\"})\n    }\n  \n})\n    \n\n\n\napp.post('/' + process.env.TWITTER_TOKEN + '/' + process.env.TOKEN  +'/ifttt', function (req, res) {\n\n    try {\n        if (!req.body) {\n            return res.status(400).send('Bad Request')\n        }\n        \n\n        if(!Bot.Subscriber) throw new Error(\"THE DATABASE IS NOT CONNECTED!\");\n\n        Bot.Subscriber.find({ subbed: true }, function(err, subscribers) {\t\t\t\n\t\t\tif (err) log(err.stack ? err.stack : err)\n\t\t\tif (subscribers.length > 0) {\n\t\t\t    client.channels.get(log_channel).send(\"[WEBHOOK] Sending IFTTT webhook to subscribers...\")\n\t\t\t\tfor (var index = 0; index < subscribers.length; index++) {                        \n\t\t\t\t\t(function(index) {\n\t\t\t\t\t\tsetTimeout(function() {\n\t\t\t\t\t\t\tlet subscriber = subscribers[index];\n\t\t\t\t\t\t\tif(subscriber && subscriber.channelid){\n\n                                let channel = client.channels.get(subscriber.channelid);\n                                let server  = client.guilds.get(subscriber.serverid);\n                               \n\t\t\t\t\t\t\t\tif(server && channel){  \n                                    \n                                    let canSendMessage = channel.permissionsFor(client.user).has(\"SEND_MESSAGES\");\n\n                                    if(canSendMessage){\n                                        client.channels.get(log_channel).send(\"[WEBHOOK] Sending IFTTT webhook to channel <#\" + channel.name + \"> on server (\"+server.id+\") \" + server.name);  \n                                        channel.send(req.body);   \n                                    }else{\n                                        \n                                        client.channels.get(log_channel).send(\"[WEBHOOK] Bot doesn't have SEND_MESSAGE or is not in a channel on server named (\"+server.id+\") \" + server.name);  \n                                    }\n                                      \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t                                                             \n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}                                       \n\t\t\t\t\t\t}, 1000 * index);\n\t\t\t\t\t})(index);\n\t\t\t\t}                           \n\t\t\t}         \n\t\t});\n        \n        res.status(200).send({message: req.body, status: \"OK\" });\n    } catch (error) {\n        res.status(200).send({message: error, status: \"ERROR\"})\n    }  \n})\n\napp.post('/' + process.env.TWITTER_TOKEN + '/' + process.env.TOKEN  +'/log', function (req, res) {\n\n    try {\n        if (!req.body) {\n            return res.status(400).send('Bad Request')\n        }\n        \n        Bot.sendToLogChannel(req.body);      \n       \n        res.status(200).send({message: req.body, status: \"OK\" });\n\n    } catch (error) {\n        console.error(error.stack ? error.stack : error)\n        res.status(200).send({message: error, status: \"ERROR\"})\n    }  \n})\n\napp.use(function(req, res, next) {\n\tvar err = new Error('Not Found');\n\terr.status = 404;\n\tnext(err);\n});\n \n\napp.use(function(err, req, res, next) {\t\t\n\tres.status(err.status || 500);\t\t\t\t\n    res.render('error', {\n\t\tmessage: err.message, \n\t\tstatus: err.status,\n        stack: err.stack\n    });\n});\n\napp.listen(process.env.PORT || 45678, function () {\n    console.log('[WEBSERVER] Service Running.');\n})",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "ReportErrors",
+    "temp": "dbm_error",
+    "event-type": "37",
+    "_id": "Emzor",
+    "actions": [
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "const channel = server.channels.get(\"453375855725641740\")\n\nif(channel){\n  channel.send(new Date())\n  channel.send(dbm_error)\n  channel.send(js_error)\n\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "temp2": "js_error"
+  },
+  {
+    "name": "-------- SUBSCRIBERS --------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "EHMRT",
+    "actions": []
+  },
+  {
+    "name": "DeletedSubscriberChannel",
+    "temp": "deleted",
+    "event-type": "9",
+    "_id": "LTlHC",
+    "actions": [
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "// Check to make sure they are subscribed\n// notify in the channel where subscribe was used\n\nconst log_channel = \"451409846160457738\"; // #subscriptons\nconst channel = tempVars(\"deleted\");\nconst server  = tempVars(\"deleted\").guild;\n\n\nfunction log(str) {\n    client.channels.get(log_channel).send(str);\n    console.log(str);\n}\n\ntry {\n    Bot.Subscriber.findOne({ serverid: server.id },function(err, subscriber){\n        if (err) log(err.stack ? err.stack : err)\n        if(subscriber && subscriber.serverid){\n            if(subscriber.serverid === server.id){   \n                subscriber.remove({ serverid: server.id },(err) => {\n                    if (err) log(err.stack ? err.stack : err)\n                    log(\"Removing Subscription from server \"+ server.name + \" Reason: Channel Deleted\")\n                    \n                });\t      \n            }\n        }\n    });\n} catch (error) {\n    console.error(error.stack ? error.stack : error)\n}\n",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "------------CRONS----------------------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "dOYaR",
+    "actions": []
+  },
+  {
+    "name": "CronLoader",
+    "permissions": "NONE",
+    "restriction": "0",
+    "_id": "crontest",
+    "actions": [
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// Make sure it only runs once!!\nif(!globalVars(\"cronloader\")){ \n  this.callNextAction(cache);\n  this.storeValue(true, 3,\"cronloader\", cache);\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "const CronJob = require('cron').CronJob;\n\nfunction checkCron(cron){\n    try {\n        new CronJob(cron, function() {});\n        return true;\n    } catch(ex) {\n        return false;\n    }\n}\n\nconst log_channel = \"449627638827450378\";\nconst channel = client.channels.get(log_channel)\ncache.temp[\"log_channel\"] = channel;\n\nlet crons = [];\nconst events = Files.data.commands.concat(Files.data.events);\nfor(var index in events) { \n    if(events[index] && events[index].name.includes(\"cron_\") ) {\n        const name = events[index].name;\n        const cronString =  events[index]._id;\n\n        if(checkCron(cronString)){\n  \n            const CronJob = require('cron').CronJob;\n            \n            let actions = events[index].actions;\n\n            const job = new CronJob({\n                cronTime: cronString,\n                onTick: function() {           \n                    console.log(\"[CRON] Tick Event: \" + name); \n                    channel.send(\"[CRON] Tick Event: \" + name);\n                    const act = actions[0];\n                    if (actions && act && Actions.exists(act.name)) {                \n                        const cache2 = {\n                            actions: actions,\n                            index: 0,\n                            temp: cache.temp,\n                            server: server,\n                            msg: null\n                        }                \n                        Actions[act.name](cache2);\n                        Actions.callNextAction(cache); \n                    }\t\n                }.bind(this),\n                start: true,\n                timeZone: 'America/Los_Angeles'\n            });\n\n            crons.push(job);\n            console.log(\"[CRON] '\"+name+\"' Job \" + (job.running ? \"Online\" : \"Offline\"))\n\n        }else{\n            console.log(\"[CRON] Cron String in Event '\" + name + \"' _id in the RawData is Invalid: \" + cronString)\n        }       \n    }\n}",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "_aliases": [
+      "gold",
+      "gv"
+    ],
+    "event-type": "0"
+  },
+  {
+    "name": "cron_golden",
+    "permissions": "NONE",
+    "restriction": "0",
+    "_id": "03 17 * * FRI",
+    "actions": [
+      {
+        "url": "http://benevolentbowd.ca/games/esotu/esotu-chronicle-of-alliance-point-vendor-items/",
+        "storage": "1",
+        "varName": "mypage",
+        "name": "Store HTML From Webpage"
+      },
+      {
+        "debugMode": "1",
+        "xpath": "//div[@class='entry-content']//ul[2]/li/text() |  //div[@class='entry-content']//h2[2]/text() | //div[@class='entry-content']//h3[1]/text()",
+        "source": "1",
+        "sourceVarName": "mypage",
+        "storage": "1",
+        "varName": "set",
+        "name": "Parse From Stored Webpage"
+      },
+      {
+        "title": "Golden Vender",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "false",
+        "url": "http://benevolentbowd.ca",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "https://i.imgur.com/S760423.jpg",
+        "thumbUrl": "https://i.imgur.com/hPSDGHF.png",
+        "storage": "1",
+        "varName": "setlist",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "fieldName": "Items for the weekend of ${tempVars(\"set\")[1]}",
+        "message": "**Locations** :  [DC](https://i.imgur.com/7P1loWW.png)  -  [EP](https://i.imgur.com/SH2gDXC.png)  -  [AD](https://i.imgur.com/Hl31kNT.png)\n\n${tempVars(\"set\")[2] || \"\"}\n${tempVars(\"set\")[3] || \"\"}\n${tempVars(\"set\")[4] || \"\"}\n${tempVars(\"set\")[5] || \"\"}\n\n${tempVars(\"set\")[6] || \"\"}\n\n${tempVars(\"set\")[7] || \"\"}\n\n${tempVars(\"set\")[8] || \"\"}\n\n${tempVars(\"set\")[9] || \"\"}\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "message": "via benevolentbowd.ca |  ESO Assistant",
+        "footerIcon": "https://i.imgur.com/R822e9b.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"setlist\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers!\"))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "_aliases": [
+      "gold",
+      "gv"
+    ],
+    "event-type": "0"
+  },
+  {
+    "name": "cron_weekly",
+    "permissions": "NONE",
+    "restriction": "0",
+    "_id": "03 10 * * MON",
+    "actions": [
+      {
+        "url": "https://esoleaderboards.com/",
+        "storage": "1",
+        "varName": "mypage",
+        "name": "Store HTML From Webpage"
+      },
+      {
+        "debugMode": "1",
+        "xpath": "//*[@id=\"score_table\"]/tbody/tr[4]/td[4]/strong/text() | //*[@id=\"score_table\"]/tbody/tr[5]/td[4]/strong/text() | //*[@id=\"score_table\"]/tbody/tr[3]/td[2]/a/img/@src",
+        "source": "1",
+        "sourceVarName": "mypage",
+        "storage": "1",
+        "varName": "weekly",
+        "name": "Parse From Stored Webpage"
+      },
+      {
+        "token": "",
+        "user": "",
+        "pass": "",
+        "url": "https://esoleaderboards.com/api/weekly?megaserver=na",
+        "path": "",
+        "storage": "1",
+        "varName": "ahlfs",
+        "debugMode": "1",
+        "headers": "",
+        "name": "Store Json From WebAPI"
+      },
+      {
+        "title": "",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "false",
+        "url": "https://esoleaderboards.com",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "${tempVars(\"weekly\")[0]}",
+        "thumbUrl": "https://i.imgur.com/hPSDGHF.png",
+        "storage": "1",
+        "varName": "embed",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "Trial of the Week",
+        "message": "***${tempVars(\"ahlfs\") || \"\"}***",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "**Highest Score**",
+        "message": "***${tempVars(\"weekly\")[1] || \"\"}***",
+        "inline": "0",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "**Lowest Score**",
+        "message": "***${tempVars(\"weekly\")[2] || \"\"}***",
+        "inline": "0",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "via esoleaderboards.com |  ESO Assistant",
+        "footerIcon": "https://i.imgur.com/R822e9b.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "channel": "5",
+        "varName2": "chan",
+        "name": "Send Embed Message"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"setlist\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers!\"))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "comType": "0",
+    "_aliases": [
+      "week",
+      "trials"
+    ],
+    "event-type": "0"
+  },
+  {
+    "name": "cron_serverstatus",
+    "permissions": "NONE",
+    "restriction": "0",
+    "_id": "*/2 * * * *",
+    "actions": [
+      {
+        "url": "https://esoserverstatus.net/",
+        "storage": "1",
+        "varName": "mypage",
+        "name": "Store HTML From Webpage"
+      },
+      {
+        "debugMode": "1",
+        "xpath": "//h4/b/node() | //span/b/node()",
+        "source": "1",
+        "sourceVarName": "mypage",
+        "storage": "1",
+        "varName": "ttc",
+        "name": "Parse From Stored Webpage"
+      },
+      {
+        "behavior": "1",
+        "interpretation": "0",
+        "code": "let status = tempVars(\"ttc\")[1]+tempVars(\"ttc\")[3]+tempVars(\"ttc\")[5]+tempVars(\"ttc\")[7]+tempVars(\"ttc\")[9]+tempVars(\"ttc\")[11]+tempVars(\"ttc\")[13]\n\nif(!globalVars(\"server_status\")){\n   this.storeValue(status, 3, \"server_status\", cache);\n}\n\nif(status !== globalVars(\"server_status\")){\n  this.callNextAction(cache);\n  this.storeValue(status, 3, \"server_status\", cache);\n}\n",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "storage": "3",
+        "varName": "server_status",
+        "name": "Save Variable"
+      },
+      {
+        "title": "esoserverstatus.net",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "false",
+        "url": "https://esoserverstatus.net/",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "https://i.imgur.com/CfTBChW.png",
+        "storage": "1",
+        "varName": "ttcprice",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "ttcprice",
+        "message": "via esoserverstatus.net  |  ESO Assistant",
+        "footerIcon": "https://i.imgur.com/nNzBHS9.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "ttcprice",
+        "fieldName": "Server Status",
+        "message": "${tempVars(\"ttc\")[3].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [PC/Mac] North-American Megaserve\n${tempVars(\"ttc\")[5].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [PC/Mac] Public Test Server\n${tempVars(\"ttc\")[1].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [PC/Mac] European Megaserver\n${tempVars(\"ttc\")[11].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [PS4] European Megaserver\n${tempVars(\"ttc\")[13].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [PS4] North-American Megaserver\n${tempVars(\"ttc\")[9].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [XBOX One] North-American Megaserver\n${tempVars(\"ttc\")[7].replace(\"Online\",\":radio_button: \").replace(\"Offline\",\":red_circle:\")} [XBOX One] European Megaserver",
+        "inline": "0",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "ttcprice",
+        "fieldName": "Online/Offline",
+        "message": "Online: :radio_button: | Offline: :red_circle:",
+        "inline": "0",
+        "name": "Add Embed Field"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"ttcprice\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers!\"))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "comType": "0",
+    "_aliases": [
+      "week",
+      "trials"
+    ],
+    "event-type": "0"
+  },
+  {
+    "name": "cron_luxury",
+    "permissions": "NONE",
+    "restriction": "0",
+    "_id": "06 17 * * FRI",
+    "actions": [
+      {
+        "url": "http://benevolentbowd.ca/games/esotu/esotu-chronicle-of-luxury-furnisher-vendor-items/",
+        "storage": "1",
+        "varName": "mypage",
+        "name": "Store HTML From Webpage"
+      },
+      {
+        "debugMode": "1",
+        "xpath": "//div[@class='entry-content']//ul[2]/li/text() |  //div[@class='entry-content']//h2[2]/text() | //div[@class='entry-content']//h3[1]/text()",
+        "source": "1",
+        "sourceVarName": "mypage",
+        "storage": "1",
+        "varName": "set",
+        "name": "Parse From Stored Webpage"
+      },
+      {
+        "title": "Luxury Vender",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "false",
+        "url": "http://benevolentbowd.ca",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "https://i.imgur.com/2AiMiic.jpg",
+        "thumbUrl": "https://i.imgur.com/hPSDGHF.png",
+        "storage": "1",
+        "varName": "setlist",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "fieldName": "Items for the weekend of ${tempVars(\"set\")[1]}",
+        "message": "**Location** :  Cicero’s Food & General Goods shop\n[Hollow City - Coldharbour](https://i.imgur.com/3a5QyG5.png)\n\n${tempVars(\"set\")[2] || \"\"}\n${tempVars(\"set\")[3] || \"\"}\n${tempVars(\"set\")[4] || \"\"}\n${tempVars(\"set\")[5] || \"\"}\n${tempVars(\"set\")[6] || \"\"}\n${tempVars(\"set\")[7] || \"\"}\n${tempVars(\"set\")[8] || \"\"}\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "message": "via benevolentbowd.ca |  ESO Assistant",
+        "footerIcon": "https://i.imgur.com/R822e9b.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"setlist\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers!\"))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "_aliases": [
+      "lv",
+      "furniture"
+    ],
+    "event-type": "0"
+  },
+  {
+    "name": "cron_pledge",
+    "temp": "",
+    "event-type": "0",
+    "_id": "01 23 * * *",
+    "actions": [
+      {
+        "url": "https://esoleaderboards.com/",
+        "storage": "1",
+        "varName": "mypage",
+        "name": "Store HTML From Webpage"
+      },
+      {
+        "debugMode": "0",
+        "xpath": "//*[@id='page-warp']/div[@id='content']/div[@class='scoreBox'][1]/div[@class='scoreBox_container']/table[@id='score_table']/tbody//text()[normalize-space(.)]",
+        "source": "1",
+        "sourceVarName": "mypage",
+        "storage": "1",
+        "varName": "set",
+        "name": "Parse From Stored Webpage"
+      },
+      {
+        "title": "Pledge Info",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "false",
+        "url": "https://esoleaderboards.com/",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "https://i.imgur.com/K87zjW7.png",
+        "thumbUrl": "https://i.imgur.com/hPSDGHF.png",
+        "storage": "1",
+        "varName": "setlist",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "fieldName": "Todays Pledges are",
+        "message": "*Maj's*: ${tempVars(\"set\")[12] || \"\"}\n*Glirion's*: ${tempVars(\"set\")[13] || \"\"}\n*Urgarlag's*: ${tempVars(\"set\")[14] || \"\"}\n\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "fieldName": "${tempVars(\"set\")[19]}",
+        "message": "${tempVars(\"set\")[16]|| \"\"} | ${tempVars(\"set\")[17]|| \"\"} | ${tempVars(\"set\")[18] || \"\"}\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "fieldName": "Yesterdays Pledges",
+        "message": "~~*${tempVars(\"set\")[8] || \"\"} | ${tempVars(\"set\")[9] || \"\"} | ${tempVars(\"set\")[10] || \"\"}*~~\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "setlist",
+        "message": "via esoleaderboards.com | Pledge Info!",
+        "footerIcon": "https://i.imgur.com/R822e9b.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "// this RunScript goes at the end of every cron\n\nconst VarToSend = tempVars(\"setlist\");\n\nBot.Subscriber.find({ subbed: true }, function(err, subscribers) {\n    if (err) log(err.stack ? err.stack : err)\n\n    if (subscribers.length > -1) {\n        for (var index = 0; index < subscribers.length; index++) {                        \n            (function(index) {\n                setTimeout(function() {\n                    let subscriber = subscribers[index];\n\n                    let channelid = subscriber.channelid;\n                    let serverid = subscriber.serverid;\n                    let channel = client.channels.get(channelid);\n\n                    if(channel){                          \n                        channel.send(VarToSend).catch(err => console.log(\"Invalid message to send to subscribers!\"))\n                    }else{\n         \n                    }\n                }, 1000 * index);\n             })(index);\n        }                           \n    }         \n});",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "-----------RESPONSE---------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "UyGmr",
+    "actions": []
+  },
+  {
+    "name": "Welcome",
+    "temp": "member",
+    "event-type": "6",
+    "_id": "welco",
+    "actions": [
+      {
+        "info": "1",
+        "find": "welcome",
+        "storage": "1",
+        "varName": "well",
+        "name": "Find Channel"
+      },
+      {
+        "info": "1",
+        "find": "Guest",
+        "storage": "1",
+        "varName": "guest",
+        "name": "Find Role"
+      },
+      {
+        "storage": "1",
+        "varName": "guest",
+        "comparison": "0",
+        "value": "",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "3",
+        "iffalseVal": "1",
+        "name": "Check Variable"
+      },
+      {
+        "member": "2",
+        "varName2": "member",
+        "role": "3",
+        "varName": "guest",
+        "name": "Add Member Role"
+      },
+      {
+        "server": "0",
+        "varName": "",
+        "info": "2",
+        "storage": "1",
+        "varName2": "server",
+        "name": "Store Server Info"
+      },
+      {
+        "storage": "1",
+        "varName": "well",
+        "comparison": "0",
+        "value": "",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "1",
+        "iffalseVal": "8",
+        "name": "Check Variable"
+      },
+      {
+        "channel": "5",
+        "varName": "well",
+        "message": "Welcome ${tempVars(\"member\")} to ${tempVars(\"server\")}!",
+        "storage": "0",
+        "varName2": "",
+        "name": "Send Message"
+      }
+    ]
+  },
+  {
+    "name": "Eso Assistant",
+    "temp": "msg",
+    "event-type": "2",
+    "actions": [
+      {
+        "message": "1",
+        "varName": "msg",
+        "info": "2",
+        "storage": "1",
+        "varName2": "text",
+        "name": "Store Message Info"
+      },
+      {
+        "storage": "1",
+        "varName": "text",
+        "comparison": "6",
+        "value": "(bot help|bothelp|bot info|botinfo|ESO Assistant|ESOAssistant|I want that bot|How do I get that bot|Where can I get that bot)",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "1",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "message": "1",
+        "varName": "msg",
+        "info": "4",
+        "storage": "1",
+        "varName2": "channel",
+        "name": "Store Message Info"
+      },
+      {
+        "info": "4",
+        "storage": "1",
+        "varName2": "usercount",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "3",
+        "storage": "1",
+        "varName2": "guildcount",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "17",
+        "storage": "1",
+        "varName2": "guildnames",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "21",
+        "storage": "1",
+        "varName2": "Discord JS version",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "10",
+        "storage": "1",
+        "varName2": "chan",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "33",
+        "storage": "1",
+        "varName2": "eve",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "32",
+        "storage": "1",
+        "varName2": "com",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "5",
+        "storage": "1",
+        "varName2": "Ping",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "31",
+        "storage": "1",
+        "varName2": "botid",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "28",
+        "storage": "1",
+        "varName2": "os",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "19",
+        "storage": "1",
+        "varName2": "prefix",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "20",
+        "storage": "1",
+        "varName2": "id",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "9",
+        "storage": "1",
+        "varName2": "voice channels",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "11",
+        "storage": "1",
+        "varName2": "emoj",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "info": "27",
+        "storage": "1",
+        "varName2": "Ram",
+        "name": "Store Bot Client Info"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "let temp = process.uptime();\n    var days = Math.floor((temp %= 31536000) / 86400);\n    var hours = Math.floor((temp %= 86400) / 3600);\n    var minutes = Math.floor((temp %= 3600) / 60);\n    var seconds = Math.round(temp % 60)\nvar sendMsg = \" \" + days + \" days \" + hours + \" hours \" + minutes + \" minutes \" + seconds + \" seconds.\"\nthis.storeValue(sendMsg, 1, \"sendMessage\", cache);",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "comment": "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/",
+        "color": "#000000",
+        "name": "Comment"
+      },
+      {
+        "server": "1",
+        "varName": "server",
+        "name": "Change Server"
+      },
+      {
+        "storage": "1",
+        "varName": "Status Message",
+        "message": "\n__***LIVE BOT STATUS: ONLINE - ALL SERVICES ARE RUNNING***__ \n\n__***Bot Prefix:***__  `${tempVars(\"prefix\")}`\n\n__***Server Count:***__  `${tempVars(\"guildcount\")}`\n\n\n__***Members:***__  `${tempVars(\"usercount\")}`\n\n\n__***Voice Connections:***__  `${tempVars(\"voice channels\")}`\n\n\n__***Bot Uptime Since Last Restart:***__  -  `${tempVars(\"sendMessage\")}`\n\n\n__***Ping***__  -  `${tempVars(\"Ping\")}`\n\n\n__***Ram Usage MB***__  -  `${tempVars(\"Ram\")}`\n\n\n__***Discord JS Version***__  -  `${tempVars(\"Discord JS version\")}`\n\n\n__***Server Names:***__ \n\n`${tempVars(\"guildnames\")}`",
+        "name": "Edit Message"
+      },
+      {
+        "title": "Add me to your Server",
+        "author": "ESO Assistant",
+        "color": "#5A58F8",
+        "timestamp": "false",
+        "url": "https://discordapp.com/api/oauth2/authorize?client_id=411786681935724546&permissions=8&scope=bot",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "https://i.imgur.com/l7NF6mH.png",
+        "storage": "1",
+        "varName": "embedded",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embedded",
+        "fieldName": "ESO Assistant Status",
+        "message": "**Bot Prefix** - ` ${tempVars(\"prefix\")} `\n**Help Menu** - `!help`\n\n**Server Count:** - `${tempVars(\"guildcount\")}`\n**Members:** - `${tempVars(\"usercount\")}`\n**Emoji Count:** - `${tempVars(\"emoj\")}`\n**Total Commands:** - `${tempVars(\"com\")}`\n**Total Events:** - `${tempVars(\"eve\")}`\n**Voice Connections:** - `${tempVars(\"voice channels\")}`\n**Ping**  -  `${tempVars(\"Ping\")}`\n**Ram Usage MB**  -  `${tempVars(\"Ram\")}`\n**Bot Operating System** - `${tempVars(\"os\")}`\n**Discord JS Version**  -  `${tempVars(\"Discord JS version\")}`\n**Node JS Version:** - `${tempVars(\"botid\")}`\n**Bot Creator:**  -  `@Ahlfs`\n**Bot ID:** - `${tempVars(\"id\")}`\n\n**Support Server**\nhttps://discord.gg/TcEKF8z\nhttp://esoassistant.com\n\n**Bot Uptime Since Last Restart:**\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embedded",
+        "message": "${tempVars(\"sendMessage\")}",
+        "footerIcon": "https://i.imgur.com/gPd5lDy.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "embedded",
+        "channel": "5",
+        "varName2": "channel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "_id": "EvEn1"
+  },
+  {
+    "name": "----------BOT-STATUS-------------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "Bfxab",
+    "actions": []
+  },
+  {
+    "name": "dicordbotsjoin",
+    "temp": "30",
+    "event-type": "4",
+    "_id": "EvEn2",
+    "actions": [
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "const superagent = require('superagent')\nconst botClient = this.getDBM().Bot.bot;\n\nsuperagent.post(`https://discordbots.org/api/bots/${client.user.id}/stats`)\n  .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQxMTc4NjY4MTkzNTcyNDU0NiIsImJvdCI6dHJ1ZSwiaWF0IjoxNTIzMTYxOTM3fQ.295C8TbAR7suWIqvQ3f2evhSzrfCo2PQjPzfQvXDE9s')\n  .send({ server_count: client.guilds && client.guilds.size ? botClient.guilds.size : (botClient.Guilds ? botClient.Guilds.size : Object.keys(botClient.Servers).length) })\n  .then(() => console.log('Updated discordbots.org stats!'))",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ]
+  },
+  {
+    "name": "-------------ADMIN----------------",
+    "temp": "",
+    "event-type": "0",
+    "_id": "EpOMy",
+    "actions": []
+  },
+  {
+    "name": "Message edited",
+    "temp": "oldmsg",
+    "event-type": "26",
+    "_id": "EvEn4",
+    "actions": [
+      {
+        "storage": "1",
+        "varName": "oldmsg",
+        "comparison": "1",
+        "value": "tempVars(\"newmsg\")",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "message": "1",
+        "varName": "oldmsg",
+        "info": "2",
+        "storage": "1",
+        "varName2": "oldmsgtxt",
+        "name": "Store Message Info"
+      },
+      {
+        "message": "1",
+        "varName": "newmsg",
+        "info": "2",
+        "storage": "1",
+        "varName2": "newmsgtxt",
+        "name": "Store Message Info"
+      },
+      {
+        "message": "1",
+        "varName": "newmsg",
+        "info": "3",
+        "storage": "1",
+        "varName2": "newmsgauth",
+        "name": "Store Message Info"
+      },
+      {
+        "message": "1",
+        "varName": "newmsg",
+        "info": "4",
+        "storage": "1",
+        "varName2": "newmsgch",
+        "name": "Store Message Info"
+      },
+      {
+        "channel": "3",
+        "varName": "newmsgch",
+        "info": "2",
+        "storage": "1",
+        "varName2": "channel",
+        "name": "Store Channel Info"
+      },
+      {
+        "member": "2",
+        "varName": "newmsgauth",
+        "info": "3",
+        "storage": "1",
+        "varName2": "memdisp",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "newmsgauth",
+        "info": "16",
+        "storage": "1",
+        "varName2": "memavatar",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "newmsgauth",
+        "info": "7",
+        "storage": "1",
+        "varName2": "tag",
+        "name": "Store Member Things"
+      },
+      {
+        "member": "2",
+        "varName": "newmsgauth",
+        "info": "4",
+        "storage": "1",
+        "varName2": "isbot",
+        "name": "Store Member Things"
+      },
+      {
+        "storage": "2",
+        "varName": "undefined",
+        "name": "Save Variable"
+      },
+      {
+        "storage": "1",
+        "varName": "isbot",
+        "comparison": "1",
+        "value": "true",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "storage": "1",
+        "varName": "oldmsg",
+        "comparison": "2",
+        "value": "tempVars(\"newmsg\")",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "info": "1",
+        "find": "bot-log",
+        "storage": "1",
+        "varName": "log-channel",
+        "name": "Find Channel"
+      },
+      {
+        "title": "BOT LOG",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "${tempVars(\"memavatar\")}",
+        "storage": "1",
+        "varName": "embed",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "${tempVars(\"oldmsgtxt\") == tempVars(\"newmsgtxt\") ? \"\" : \"Edited Message\"}",
+        "message": "Old Message:\n```${tempVars(\"oldmsgtxt\")}```\nNew Message: \n```${tempVars(\"newmsgtxt\")}```",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "${tempVars(\"tag\")} Edited a message in: ${tempVars(\"channel\")}",
+        "footerIcon": "https://i.imgur.com/d3xbKQL.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "undefined",
+        "comparison": "2",
+        "value": "undefined",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "channel": "5",
+        "varName2": "log-channel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "temp2": "newmsg"
+  },
+  {
+    "name": "HiWithEmbed",
+    "temp": "member",
+    "event-type": "6",
+    "actions": [
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "16",
+        "storage": "1",
+        "varName2": "avatar",
+        "name": "Store Member Info"
+      },
+      {
+        "server": "0",
+        "varName": "",
+        "info": "17",
+        "storage": "1",
+        "varName2": "memnum",
+        "name": "Store Server Info"
+      },
+      {
+        "server": "0",
+        "varName": "",
+        "info": "2",
+        "storage": "1",
+        "varName2": "sname",
+        "name": "Store Server Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "2",
+        "storage": "1",
+        "varName2": "name",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "0",
+        "storage": "1",
+        "varName2": "object",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "6",
+        "storage": "1",
+        "varName2": "disc",
+        "name": "Store Member Things"
+      },
+      {
+        "info": "1",
+        "find": "bot-log",
+        "storage": "1",
+        "varName": "channel",
+        "name": "Find Channel"
+      },
+      {
+        "title": "BOT LOG",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "${tempVars(\"avatar\")}",
+        "storage": "1",
+        "varName": "embed",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "New User Joined Server: \n${tempVars(\"member\")}!\n\nServer:\n${tempVars(\"sname\")}\n\nServer Member Count:\n${tempVars(\"memnum\")}\n\nHas had Discord Since:\n${tempVars(\"disc\")}",
+        "name": "Set Embed Description"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "",
+        "footerIcon": "https://i.imgur.com/d3xbKQL.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "channel": "5",
+        "varName2": "channel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "_id": "EvEn6"
+  },
+  {
+    "name": "ByeWithEmbed",
+    "temp": "member",
+    "event-type": "7",
+    "actions": [
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "16",
+        "storage": "1",
+        "varName2": "avatar",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "2",
+        "storage": "1",
+        "varName2": "name",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "0",
+        "storage": "1",
+        "varName2": "object",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "7",
+        "storage": "1",
+        "varName2": "role",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "0",
+        "storage": "1",
+        "varName2": "disc",
+        "name": "Store Member Things"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "2",
+        "storage": "1",
+        "varName2": "ms",
+        "name": "Store Member Things"
+      },
+      {
+        "info": "1",
+        "find": "bot-log",
+        "storage": "1",
+        "varName": "channel",
+        "name": "Find Channel"
+      },
+      {
+        "title": "BOT LOG",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "${tempVars(\"avatar\")}",
+        "storage": "1",
+        "varName": "embed",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "User that left: \n${tempVars(\"member\")}!",
+        "name": "Set Embed Description"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "User Info:",
+        "message": "Highest Role:\n${tempVars(\"role\")}\n\nLast Message sent:\n${tempVars(\"ms\") || \"None Recorded\"}\n\n\n\nMember since:\n${tempVars(\"disc\")}\n",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "\n",
+        "footerIcon": "https://i.imgur.com/d3xbKQL.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "channel": "5",
+        "varName2": "channel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "_id": "EvEn5"
+  },
+  {
+    "name": "LevelingSystem",
+    "temp": "msg",
+    "event-type": "2",
+    "actions": [
+      {
+        "message": "1",
+        "varName": "msg",
+        "info": "3",
+        "storage": "1",
+        "varName2": "member",
+        "name": "Store Message Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "info": "2",
+        "storage": "1",
+        "varName2": "name",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "exp",
+        "defaultVal": "0",
+        "storage": "1",
+        "varName2": "exps",
+        "name": "Store Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "exp",
+        "changeType": "0",
+        "value": "${parseInt(tempVars(\"exps\")) + 1}",
+        "name": "Control Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "level",
+        "defaultVal": "1",
+        "storage": "1",
+        "varName2": "myLevel",
+        "name": "Store Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "exp",
+        "comparison": "1",
+        "value": "${tempVars(\"myLevel\") * 10}",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "1",
+        "iffalseVal": "",
+        "name": "Check Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "exp",
+        "changeType": "0",
+        "value": "0",
+        "name": "Control Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "level",
+        "defaultVal": "1",
+        "storage": "1",
+        "varName2": "level",
+        "name": "Store Member Data"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "level",
+        "changeType": "0",
+        "value": "${parseInt(tempVars(\"level\")) + 1}",
+        "name": "Control Member Data"
+      },
+      {
+        "message": "1",
+        "varName": "msg",
+        "info": "4",
+        "storage": "1",
+        "varName2": "channel",
+        "name": "Store Message Info"
+      },
+      {
+        "member": "2",
+        "varName": "member",
+        "dataName": "level",
+        "defaultVal": "1",
+        "storage": "1",
+        "varName2": "myLevel",
+        "name": "Store Member Data"
+      },
+      {
+        "message": "1",
+        "varName": "msg",
+        "info": "4",
+        "storage": "1",
+        "varName2": "msgchannel",
+        "name": "Store Message Info"
+      },
+      {
+        "storage": "2",
+        "varName": "off",
+        "comparison": "2",
+        "value": "2",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "storage": "2",
+        "varName": "on",
+        "comparison": "2",
+        "value": "1",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "1",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "channel": "5",
+        "varName": "msgchannel",
+        "message": "${tempVars(\"name\")} has reached Champion Rank ${tempVars(\"myLevel\")}!",
+        "storage": "0",
+        "varName2": "",
+        "name": "Send Message"
+      }
+    ],
+    "_id": "RzLaP"
+  },
+  {
+    "name": "bot-dm-log-embed",
+    "temp": "dm-msg",
+    "event-type": "2",
+    "actions": [
+      {
+        "behavior": "0",
+        "interpretation": "1",
+        "code": "tempVars(\"dm-msg\").member == null ? tempVars(\"dm-msg\").channel.recipient.username : \"\"",
+        "storage": "1",
+        "varName": "username",
+        "name": "Run Script"
+      },
+      {
+        "storage": "1",
+        "varName": "username",
+        "comparison": "0",
+        "value": "",
+        "iftrue": "0",
+        "iftrueVal": "",
+        "iffalse": "1",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "1",
+        "code": "tempVars(\"dm-msg\").content",
+        "storage": "1",
+        "varName": "msg-content",
+        "name": "Run Script"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "1",
+        "code": "tempVars(\"dm-msg\").channel.recipient.avatarURL",
+        "storage": "1",
+        "varName": "auth_URL",
+        "name": "Run Script"
+      },
+      {
+        "info": "0",
+        "find": "451303011495575562",
+        "storage": "1",
+        "varName": "server",
+        "name": "Find Server"
+      },
+      {
+        "server": "1",
+        "varName": "server",
+        "name": "Change Server"
+      },
+      {
+        "info": "0",
+        "find": "451465726893490203",
+        "storage": "1",
+        "varName": "logchannel",
+        "name": "Find Channel"
+      },
+      {
+        "title": "",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "",
+        "storage": "1",
+        "varName": "e",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "e",
+        "fieldName": "Message",
+        "message": "${tempVars(\"msg-content\")}",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "tempVars(\"e\").setFooter(tempVars(\"username\"), tempVars(\"auth_URL\"))",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      },
+      {
+        "storage": "1",
+        "varName": "e",
+        "channel": "5",
+        "varName2": "logchannel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "_id": "SGVMp"
+  },
+  {
+    "name": "botjoinedserver",
+    "temp": "",
+    "event-type": "4",
+    "_id": "Ahlfs",
+    "actions": [
+      {
+        "server": "0",
+        "varName": "",
+        "info": "2",
+        "storage": "1",
+        "varName2": "serverjoined",
+        "name": "Store Server Info"
+      },
+      {
+        "server": "1",
+        "varName": "serverjoined",
+        "info": "9",
+        "storage": "1",
+        "varName2": "defaultchannel",
+        "name": "Store Server Info"
+      },
+      {
+        "info": "0",
+        "find": "451303011495575562",
+        "storage": "1",
+        "varName": "bots",
+        "name": "Find Server"
+      },
+      {
+        "server": "1",
+        "varName": "bots",
+        "info": "11",
+        "storage": "1",
+        "varName2": "name",
+        "name": "Store Server Info"
+      },
+      {
+        "title": "New server: ${tempVars(\"serverjoined\")}",
+        "author": "",
+        "color": "0000FF",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "",
+        "imageUrl": "",
+        "thumbUrl": "",
+        "storage": "1",
+        "varName": "msg",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "msg",
+        "message": "The bot just joined ${tempVars(\"serverjoined\")}!",
+        "name": "Set Embed Description"
+      },
+      {
+        "storage": "1",
+        "varName": "msg",
+        "channel": "5",
+        "varName2": "name",
+        "name": "Send Embed Message"
+      },
+      {
+        "server": "1",
+        "varName": "bots",
+        "name": "Change Server"
+      },
+      {
+        "info": "1",
+        "find": "joined-new-server",
+        "storage": "1",
+        "varName": "bot",
+        "name": "Find Channel"
+      },
+      {
+        "storage": "1",
+        "varName": "msg",
+        "channel": "5",
+        "varName2": "bot",
+        "name": "Send Embed Message"
+      },
+      {
+        "name": "End Action Sequence"
+      }
+    ]
+  },
+  {
+    "name": "nick name edit",
+    "temp": "old",
+    "event-type": "20",
+    "actions": [
+      {
+        "storage": "1",
+        "varName": "old",
+        "comparison": "2",
+        "value": "tempVars(\"new\")",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "member": "2",
+        "varName": "old",
+        "info": "3",
+        "storage": "1",
+        "varName2": "old2",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "new",
+        "info": "3",
+        "storage": "1",
+        "varName2": "new2",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "old",
+        "info": "2",
+        "storage": "1",
+        "varName2": "uname",
+        "name": "Store Member Info"
+      },
+      {
+        "member": "2",
+        "varName": "old",
+        "info": "16",
+        "storage": "1",
+        "varName2": "pic",
+        "name": "Store Member Info"
+      },
+      {
+        "info": "1",
+        "find": "bot-log",
+        "storage": "1",
+        "varName": "channel",
+        "name": "Find Channel"
+      },
+      {
+        "title": "BOT LOG",
+        "author": "ESO Assistant",
+        "color": "#2256bf",
+        "timestamp": "true",
+        "url": "",
+        "authorIcon": "https://i.imgur.com/zQadp8w.png",
+        "imageUrl": "",
+        "thumbUrl": "${tempVars(\"pic\")}",
+        "storage": "1",
+        "varName": "embed",
+        "name": "Create Embed Message"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "fieldName": "${tempVars(\"old2\") == tempVars(\"new2\") ? \"\" : \"Nick Name Changed\"}",
+        "message": "Previous Name:\n```${tempVars(\"old2\")}```\nNew Name:\n```${tempVars(\"new2\")}```",
+        "inline": "1",
+        "name": "Add Embed Field"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "message": "${tempVars(\"uname\")} Changed their Nick Name",
+        "footerIcon": "https://i.imgur.com/d3xbKQL.png",
+        "name": "Set Embed Footer"
+      },
+      {
+        "storage": "1",
+        "varName": "old",
+        "comparison": "1",
+        "value": "tempVars(\"new\")",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable"
+      },
+      {
+        "storage": "1",
+        "varName": "old2",
+        "comparison": "2",
+        "value": "tempVars(\"new2\")",
+        "iftrue": "1",
+        "iftrueVal": "",
+        "iffalse": "0",
+        "iffalseVal": "",
+        "name": "Check Variable MOD"
+      },
+      {
+        "storage": "1",
+        "varName": "embed",
+        "channel": "5",
+        "varName2": "channel",
+        "name": "Send Embed Message"
+      }
+    ],
+    "_id": "JxouW",
+    "temp2": "new"
+  },
+  {
+    "name": "export event",
+    "permissions": "NONE",
+    "restriction": "1",
+    "_id": "oOCvJ",
+    "actions": [
+      {
+        "info": "1",
+        "infoIndex": "2",
+        "storage": "1",
+        "varName": "eventName",
+        "name": "Store Command Params"
+      },
+      {
+        "behavior": "0",
+        "interpretation": "0",
+        "code": "try{\n  var path = require('path')\n  var fs   = require('fs')\n\n  let selectedEvent = {}\n  for(var index in Files.data.events){\n    var event = Files.data.events[index]\n    if(event && event.name == tempVars(\"eventName\")){\n      selectedEvent = event;\n      break;\n    }\n  }\n\n  if(selectedEvent && selectedEvent.name){\n var fileName = path.join('exported',selectedEvent.name + \"_\"+ selectedEvent._id + \"_rawdata.json\");\n\n  fs.writeFileSync(fileName ,JSON.stringify(selectedEvent, null, 2));\n   \n  msg.channel.send(\"Here is your requested event raw data!.\", {\n    files: [\n      fileName\n    ]\n   })\n  }else{\n   msg.channel.send(\"Requested event does not exist!\")\n  }\n \n}catch(error){ console.error(error)}\n\n\n",
+        "storage": "0",
+        "varName": "",
+        "name": "Run Script"
+      }
+    ],
+    "comType": "1",
+    "event-type": "0"
+  }
+]
