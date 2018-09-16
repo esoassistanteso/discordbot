@@ -27,6 +27,31 @@ subtitle: function(data) {
 	return `Find Member by ${info[parseInt(data.info)]}`;
 },
 
+
+	//---------------------------------------------------------------------
+	 // DBM Mods Manager Variables (Optional but nice to have!)
+	 //
+	 // These are variables that DBM Mods Manager uses to show information
+	 // about the mods for people to see in the list.
+	 //---------------------------------------------------------------------
+
+	 // Who made the mod (If not set, defaults to "DBM Mods")
+	 author: "DBM & Lasse",
+
+	 // The version of the mod (Defaults to 1.0.0)
+	 version: "1.8.9", //Added in 1.8.9
+
+	 // A short description to show on the mod line for this mod (Must be on a single line)
+	 short_description: "Fixed.",
+
+	 // If it depends on any other mods by name, ex: WrexMODS if the mod uses something from WrexMods
+
+
+	 //---------------------------------------------------------------------
+
+
+	 
+	 
 //---------------------------------------------------------------------
 // Action Storage Function
 //
@@ -124,6 +149,14 @@ action: function(cache) {
 	const data = cache.actions[cache.index];
 	const info = parseInt(data.info);
 	const find = this.evalMessage(data.find, cache);
+	
+	//DBM Mods ~ Lasse
+	//Checks if server is large and caches all users to verify that offline users are tracked.
+	if(server.large == true) {
+		server.fetchMembers();
+	}
+	//End
+	
 	let result;
 	switch(info) {
 		case 0:
@@ -143,6 +176,7 @@ action: function(cache) {
 		default:
 			break;
 	}
+	
 	if(result !== undefined) {
 		const storage = parseInt(data.storage);
 		const varName = this.evalMessage(data.varName, cache);

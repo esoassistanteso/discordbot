@@ -101,7 +101,7 @@ html: function(isEvent, data) {
 
 		Common Filters:<br>
 		<pre>
-		If message IS the response: content.equals('response')
+		If message IS the response: content === 'response'
 		if message HAS the word:  content.includes('response')
 		if message BEGINS wth the word: content.startsWith('response')
 		if message ENDS wth the word: content.endsWith('response')

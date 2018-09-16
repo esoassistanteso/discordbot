@@ -6,7 +6,7 @@ module.exports = {
 // This is the name of the action displayed in the editor.
 //---------------------------------------------------------------------
 
-name: "Send Message to Console",
+name: "Loop through Folder",
 
 //---------------------------------------------------------------------
 // Action Section
@@ -14,7 +14,7 @@ name: "Send Message to Console",
 // This is the section the action will fall into.
 //---------------------------------------------------------------------
 
-section: "Other Stuff",
+section: "Lists and Loops",
 
 //---------------------------------------------------------------------
 // Action Subtitle
@@ -23,30 +23,43 @@ section: "Other Stuff",
 //---------------------------------------------------------------------
 
 subtitle: function(data) {
-	return `${data.tosend}`;
+    return `Loops through folder, and turns filenames into array`;
 },
 
+    //---------------------------------------------------------------------
+    // DBM Mods Manager Variables (Optional but nice to have!)
+    //
+    // These are variables that DBM Mods Manager uses to show information
+    // about the mods for people to see in the list.
+    //---------------------------------------------------------------------
+
+    // Who made the mod (If not set, defaults to "DBM Mods")
+    author: "Jakob",
+
+    // The version of the mod (Defaults to 1.0.0)
+    version: "1.0", //Added in 1.8.9
+
+    // A short description to show on the mod line for this mod (Must be on a single line)
+    short_description: "Loops through a folder and puts the items in an array",
+
+    // If it depends on any other mods by name, ex: WrexMODS if the mod uses something from WrexMods
+
+
+    //---------------------------------------------------------------------
 
 //---------------------------------------------------------------------
-// DBM Mods Manager Variables (Optional but nice to have!)
+// Action Storage Function
 //
-// These are variables that DBM Mods Manager uses to show information
-// about the mods for people to see in the list.
+// Stores the relevant variable info for the editor.
 //---------------------------------------------------------------------
 
-// Who made the mod (If not set, defaults to "DBM Mods")
-author: "Lasse",
-
-// The version of the mod (Defaults to 1.0.0)
-version: "1.8.2",
-
-// A short description to show on the mod line for this mod (Must be on a single line)
-short_description: "Sends a message to the console",
-
-// If it depends on any other mods by name, ex: WrexMODS if the mod uses something from WrexMods
-
-
-//---------------------------------------------------------------------
+variableStorage: function(data, varType) {
+    const type = parseInt(data.storage);
+    if (type !== varType) return;
+    const filename = parseInt(data.filename);
+    let dataType = 'Array';
+    return ([data.varName2, dataType]);
+},
 
 //---------------------------------------------------------------------
 // Action Fields
@@ -56,7 +69,7 @@ short_description: "Sends a message to the console",
 // are also the names of the fields stored in the action's JSON data.
 //---------------------------------------------------------------------
 
-fields: ["tosend"],
+fields: ["filename", "storage", "varName2"],
 
 //---------------------------------------------------------------------
 // Command HTML
@@ -75,18 +88,35 @@ fields: ["tosend"],
 //---------------------------------------------------------------------
 
 html: function(isEvent, data) {
-	return `
-	<div>
-		<p>
-			<u>Mod Info:</u><br>
-			Created by Lasse!
-		</p>
-	</div><br>
-<div style="padding-top: 8px;">
-	Message to send:<br>
-	<textarea id="tosend" rows="4" style="width: 99%; font-family: monospace; white-space: nowrap; resize: none;"></textarea>
+    return `
+<div>
+    <p>
+        <u>Mod Info:</u><br>
+        Created by Jakob, original code by EliteArtz<br><br>
+
+        <u>Notice:</u><br>
+        -The folder needs to be in the bot folder!<br>
+        -This is a good path: ./resources/images<br>
+        -This will turn all filenames in the folder into an array.<br>
+    </p>
+    <div style="float: left; width: 60%">
+        Folder Path:
+        <input id="filename" class="round" type="text">
+    </div><br>
+</div><br><br><br>
+<div>
+    <div style="float: left; width: 35%;">
+        Store In:<br>
+        <select id="storage" class="round">
+            ${data.variables[1]}
+        </select>
+    </div>
+    <div id="varNameContainer2" style="float: right; width: 60%;">
+        Variable Name:<br>
+        <input id="varName2" class="round" type="text"><br>
+    </div>
 </div>`
-},
+    },
 
 //---------------------------------------------------------------------
 // Action Editor Init Code
@@ -106,11 +136,23 @@ init: function() {},
 // so be sure to provide checks for variable existance.
 //---------------------------------------------------------------------
 
-action: function(cache) {
-	const data = cache.actions[cache.index];
-	const send = this.evalMessage(data.tosend, cache);
-	console.log(send);
-	this.callNextAction(cache);
+action: function (cache) {
+    const
+        data = cache.actions[cache.index],
+        fs = require('fs');
+        FOLDERPATH = this.evalMessage(data.filename, cache)
+    var output = {};
+    try {
+        if (FOLDERPATH) {
+            output = fs.readdirSync(FOLDERPATH);
+            this.storeValue(output, parseInt(data.storage), this.evalMessage(data.varName2, cache), cache);
+        } else {
+            console.log(`Path is missing.`);
+         }
+    } catch (err) {
+        console.error("ERROR!" + err.stack ? err.stack : err);
+    }
+    this.callNextAction(cache);
 },
 
 //---------------------------------------------------------------------
@@ -122,7 +164,6 @@ action: function(cache) {
 // functions you wish to overwrite.
 //---------------------------------------------------------------------
 
-mod: function(DBM) {
-}
+mod: function(DBM) {}
 
 }; // End of module
