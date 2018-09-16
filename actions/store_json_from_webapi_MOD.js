@@ -304,7 +304,7 @@ module.exports = {
 						error = err;
 					}
 
-					if(_DEBUG) console.log("WebAPI: Using previously stored json data from the initial store json action within this command.")
+					console.log("WebAPI: Using previously stored json data from the initial store json action within this command.")
 
 					storeData(error, res, jsonData);
 					

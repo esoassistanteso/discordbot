@@ -63,7 +63,7 @@ html: function(isEvent, data) {
 <div>
 	<div id="varNameContainer" style="float: left; width: 60%;">
 		Jump to Action:<br>
-		<input id="call" class="round" type="number">
+		<input id="call" class="round" type="text">
 	</div>
 </div><br><br><br>`
 },
