@@ -35,7 +35,7 @@ return `Convert into ${data.varName}`;
 	 //---------------------------------------------------------------------
 
  // Who made the mod (If not set, defaults to "DBM Mods")
- author: "General Wrex", //Idea by Tresmos
+ author: "Mrs.Ahlfs", //Idea by Tresmos
 
  // The version of the mod (Defaults to 1.0.0)
  version: "1.8.6", //Added in 1.8.6
@@ -92,7 +92,7 @@ html: function(isEvent, data) {
 <div>
 		<p>
 			<u>Mod Info:</u><br>
-			Created by General Wrex!
+			Created by Mrs.Ahlfs!
 		</p>
 </div><br>
 <div>

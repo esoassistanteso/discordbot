@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Created by General Wrex
+// Created by Mrs.Ahlfs
 // My Patreons have made creating this script possible @ https://www.patreon.com/generalwrex
 // At the time of editing this script, they are:
 // - MitchDaGamer
@@ -34,7 +34,7 @@ dbmMod.section = "JSON Things";
 //---------------------------------------------------------------------
 
 // Who made the mod (If not set, defaults to "DBM Mods")
-dbmMod.author = "General Wrex";
+dbmMod.author = "Mrs.Ahlfs";
 
 // The version of the mod (Defaults to 1.0.0)
 dbmMod.version = "1.8.2";
@@ -118,7 +118,7 @@ dbmMod.html = function(isEvent, data) {
 	<div>
 	   <p>
 		  <u>Mod Info:</u><br>
-		  Created by General Wrex!<br>
+		  Created by Mrs.Ahlfs!<br>
 		  Scroll down for more action options!<br><br>
 		  <u>Note:</u><br>
 		  Once Hide Url is pressed, It becomes a password box. Save your url somewhere!<br><br>

@@ -1,5 +1,5 @@
 	//---------------------------------------------------------------------
-	// Created by General Wrex
+	// Created by Mrs.Ahlfs
 	// My Patreons have made creating this script possible @ https://www.patreon.com/generalwrex
 	// At the time of editing this script, they are:
 	// - MitchDaGamer
@@ -24,7 +24,7 @@ module.exports = {
 	//---------------------------------------------------------------------
 
 	// Who made the mod (If not set, defaults to "DBM Mods")
-	author: "General Wrex",
+	author: "Mrs.Ahlfs",
 
 	// The version of the mod (Defaults to 1.0.0)
 	version: "1.0.3",
@@ -108,7 +108,7 @@ module.exports = {
 		<div>
 		   <p>
 			  <u>Mod Info:</u><br>
-			  Created by General Wrex!<br> 
+			  Created by Mrs.Ahlfs!<br> 
 			  Updated: Feb 18th, 2018<br>			 
 			  If you dont want to see all that data in the console, scroll down to the options!<br><br> 
 		   </p>

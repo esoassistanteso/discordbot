@@ -37,7 +37,7 @@ subtitle: function(data) {
 author: "DBM Mods",
 
 // The version of the mod (Defaults to 1.0.0)
-version: "1.8.8 ~ beta",
+version: "1.8.8",
 
 // A short description to show on the mod line for this mod.
 short_description: "Information about the Mod Collection.",
@@ -159,7 +159,7 @@ tbody { border-top: 2px solid white; }
 		- Aamon (5$)<br>
 		- cryptomoon (3$)<br>
 		- Cipher The Universe (1$)<br>
-		- General Wrex (1$)<br>
+		- Mrs.Ahlfs (1$)<br>
 		- EGGSY (1$)<br>
 		- Proximity (1$)<br>
 		- William286 (1$)<br><br>

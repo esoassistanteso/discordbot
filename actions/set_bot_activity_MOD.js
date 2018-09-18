@@ -61,7 +61,7 @@ html: function(isEvent, data) {
 		<p>
 			<u>Mod Info:</u><br>
 			Created by Lasse!<br>
-			Edited by General Wrex<br><br>
+			Edited by Mrs.Ahlfs<br><br>
 			Streaming Activity only works with Twitch.<br>
 			This action requires the latest discord.js version!<br>
 			Check out this video: https://youtu.be/mrrtj5nlV58<br>

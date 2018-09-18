@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-6">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.standalone.min.css">
+  <link rel="stylesheet" href="now-ui-kit.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/nucleo-icons.css" type="text/css">
+  <script src="assets/js/navbar-ontop.js"></script>
+  <link rel="icon" href="https://templates.pingendo.com/assets/Pingendo_favicon.ico">
+  <title>Now UI Kit by Creative Tim</title>
+  <meta name="description" content="Start your development with a beautiful Bootstrap 4 UI kit. It is yours Free.">
+  <meta name="keywords" content="bootstrap 4, bootstrap 4 uit kit, bootstrap 4 kit, now ui, now ui kit, creative tim, html kit, html css template, web template, bootstrap, bootstrap 4, css3 template, frontend, responsive bootstrap template, bootstrap ui kit, responsive ui kit"> </head>
+
+<body class="bg-secondary">
+  <nav class="navbar navbar-expand-lg bg-primary navbar-dark fixed-top">
+    <div class="container">
+      <b>DISCORD BOT</b>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNowUIKitFree">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse text-center justify-content-end" id="navbarNowUIKitFree">
+        <ul class="navbar-nav">
+          <li class="nav-item mx-1 align-items-center d-flex justify-content-center">
+            <a class="nav-link" href="https://discordapp.com/api/oauth2/authorize?client_id=411786681935724546&amp;permissions=8&amp;scope=bot">
+              <i class="now-ui-icons arrows-1_cloud-download-93 x2 mr-2"></i>
+              <b>GET ESO ASSISTANT</b>
+            </a>
+          </li>
+          <li class="nav-item mx-1 align-items-center d-flex justify-content-center">
+            <a class="nav-link" href="#">
+              <i class="now-ui-icons files_paper x2 mr-2"></i>
+              <b>COMMANDS &amp; EVENTS</b>
+            </a>
+          </li>
+        </ul>
+        <a class="btn btn-light text-primary" href="ahlfs@live.com">
+          <i class="now-ui-icons arrows-1_share-66 mr-1"></i>
+          <b>SUBMIT IMAGES</b>
+        </a>
+      </div>
+    </div>
+  </nav>
+  <div class="py-2 bg-gray">
+    <div class="container">
+      <div class="row"> </div>
+    </div>
+  </div>
+  <div class="py-5 text-center parallax cover gradient-overlay" style="background-image: url(https://i.imgur.com/b1L5ywD.jpg);position:relative;background-position:center center;background-size:cover;">
+    <div class="container d-flex flex-column">
+      <div class="row my-auto">
+        <div class="col-md-12 text-white">
+          <img class="mb-5" src="https://i.imgur.com/zQadp8w.png" width="100">
+          <h1 class="mb-7 display-0">
+            <b>ESO Assistant</b>
+          </h1>
+          <h3 class="mb-2">An&nbsp;
+            <b>Elder Scrolls Online</b> Discord Bot filled with useful Information</h3>
+        </div>
+      </div>
+      <div class="row py-8">
+        <div class="col-md-12">
+          <img src="https://discordbots.org/api/widget/411786681935724546.svg" alt="ESO Assistant"> </div>
+        <a href="http://esoassistant.com" style="font-weight: bold;"> </a>
+      </div>
+      <a href="#" style="font-weight: bold;"> </a>
+    </div>
+    <a href="#" style="font-weight: bold;"> </a>
+  </div>
+  <a href="#" style="font-weight: bold;"> </a>
+  <a href="#" style="font-weight: bold;">
+    <div class="section-overlapping">
+      <div class="container">
+        <div class="row"></div>
+      </div>
+    </div>
+  </a>
+  <div class="pt-5">
+    <a href="#" style="font-weight: bold;"> </a>
+  </div>
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <a href="https://discordbots.org/bot/411786681935724546"> </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 bg-secondary"> </div>
+  <div class="alert alert-info text-white px-5" role="alert">
+    <div class="container">
+      <i class="now-ui-icons travel_info lg pull-left mr-3"></i>
+      <strong>HEADS UP!</strong>
+      <span> This alert needs your attention, but it's not super important. Until the Master of Code has Done somthing with it!</span>
+      <button type="button" class="close text-white" data-dismiss="alert">
+        <i class="now-ui-icons ui-1_simple-remove"></i>
+      </button>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header"> Information</div>
+            <div class="card-body">
+              <h6>
+                <span style="font-weight: normal;">Type !help to get a list of commands.&nbsp;
+                  <br>Bot Info or ESO Assistant no Prefix needed to get Stats​</span>
+              </h6>
+              <h6 class="text-muted">ABOUT ESO ASSISTANT</h6>
+              <p>ESO Assistant is a Discord Bot to pair with the use of The Elder Scrolls Online to improve and make your game experience more enjoyable. With many commands that get you the info you want and need to get started with quests and pricing and
+                just having fun. To get a full list of commands come to our Discord server or follow the instructions bellow.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> Source Information and Credits </h5>
+              <p class="card-text">eso-sets.com Content © by Alcast &amp; Woeler&nbsp;
+                <br>benevolentbowd.ca&nbsp;
+                <br>uesp.net&nbsp;
+                <br>us.tamrieltradecentre.com&nbsp;
+                <br>esoleaderboards.com&nbsp;
+                <br>eso-database.com&nbsp;
+                <br>esoserverstatus.net&nbsp;
+                <br>
+                <br>
+                <br>Content and materials from The Elder Scrolls® Online: Tamriel Unlimited™ © ZeniMax® Online Studios, LLC or its licensors. This site is not affiliated with ZeniMax Online Studios.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <img class="card-img-top" src="https://i.imgur.com/5trdEvi.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Example</h5>
+              <p class="card-text">A couple example command layouts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-5 text-center bg-secondary">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card p-5 m-1 bg-light">
+            <div class="card-block">
+              <p class="lead">
+                <i>Become a Patreon</i>
+              </p>
+            </div>
+            <div class="card-block my-3">
+              <h1>
+                <img class="mb-5" src="https://i.imgur.com/XxeHZ5I.png" width="100"> </h1>
+              <p>Just getting started, you can help and join us on this adventure and test the latest and most current commands. As a supporter of ESO Assistant, you will have access to secret commands that you can share with your friends, help with testing
+                and a special rank in the ESO Assistant Discord.</p>
+            </div>
+            <div class="card-block">
+              <a href="https://www.patreon.com/esoassistant" class="btn btn-secondary">Support Us</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-5 m-1 bg-info">
+            <div class="card-block">
+              <p class="lead">
+                <i>Our Discords Server</i>
+              </p>
+            </div>
+            <div class="card-block my-3">
+              <h1>
+                <img class="mb-5" src="https://i.imgur.com/51Kc6m0.png" width="100"> </h1>
+              <p>Join our Discord Server and give us a test run and see how ESO Assistant works or just to hang out.</p>
+            </div>
+            <div class="card-block">
+              <a href="https://discord.gg/TcEKF8z" class="btn btn-secondary">
+                <b>JOIN</b>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-5 m-1 text-white bg-info">
+            <div class="card-block">
+              <p class="lead">
+                <i>ESO Assistant</i>
+              </p>
+            </div>
+            <div class="card-block my-3">
+              <img class="mb-5" src="https://i.imgur.com/zQadp8w.png" width="100">
+              <p>ESO Assistant You can add me to your Discord Guild by clicking my image above. I look forward to severing you and improving your gaming experience!</p>
+            </div>
+            <div class="card-block">
+              <a href="#" class="btn btn-light">
+                <b>GET ME</b>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <iframe src="https://discordapp.com/widget?id=451303011495575562&amp;theme=dark" width="100%" height="675" allowtransparency="true" frameborder="5"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Work in Progress</h5>
+                <small>3 days ago</small>
+              </div>
+              <p class="mb-1">Somthing cool in the works!</p>
+              <small></small>
+            </a>
+            
+</body>
+
+</html>
