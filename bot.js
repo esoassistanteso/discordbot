@@ -1,6 +1,6 @@
 /*
  * Discord Bot Maker Bot
- * Version 2.0.0
+ * Version 2.0.1
  * Robert Borghese
  */
 
@@ -907,7 +907,7 @@ const Events = DBM.Events = {};
 let $evts = null;
 
 Events.data = [
-	[],[],[],[],['guildCreate', 0, 0, 1],['guildDelete', 0, 0, 1],['guildMemberAdd', 1, 0, 2],['guildMemberRemove', 1, 0, 2],['channelCreate', 1, 0, 2, true, 'arg1.type !== \'text\''],['channelDelete', 1, 0, 2, true, 'arg1.type !== \'text\''],['roleCreate', 1, 0, 2],['roleDelete', 1, 0, 2],['guildBanAdd', 3, 0, 1],['guildBanRemove', 3, 0, 1],['channelCreate', 1, 0, 2, true, 'arg1.type !== \'voice\''],['channelDelete', 1, 0, 2, true, 'arg1.type !== \'voice\''],['emojiCreate', 1, 0, 2],['emojiDelete', 1, 0, 2],['guildUpdate', 1, 3, 3],['messageDelete', 1, 0, 2, true],['guildMemberUpdate', 1, 3, 4],['presenceUpdate', 1, 3, 4],['voiceStateUpdate', 1, 3, 4],['channelUpdate', 1, 3, 4, true],['channelPinsUpdate', 1, 0, 2, true],['roleUpdate', 1, 3, 4],['messageUpdate', 1, 3, 4, true, 'arg2.content.length === 0'],['emojiUpdate', 1, 3, 4],[],[],['messageReactionRemoveAll', 1, 0, 2, true],['guildMemberAvailable', 1, 0, 2],['guildMembersChunk', 1, 0, 3],['guildMemberSpeaking', 1, 3, 2],[],[],['guildUnavailable', 1, 0, 1]
+	[],[],[],[],['guildCreate', 0, 0, 1],['guildDelete', 0, 0, 1],['guildMemberAdd', 1, 0, 2],['guildMemberRemove', 1, 0, 2],['channelCreate', 1, 0, 2, true, 'arg1.type !== \'text\''],['channelDelete', 1, 0, 2, true, 'arg1.type !== \'text\''],['roleCreate', 1, 0, 2],['roleDelete', 1, 0, 2],['guildBanAdd', 3, 0, 1],['guildBanRemove', 3, 0, 1],['channelCreate', 1, 0, 2, true, 'arg1.type !== \'voice\''],['channelDelete', 1, 0, 2, true, 'arg1.type !== \'voice\''],['emojiCreate', 1, 0, 2],['emojiDelete', 1, 0, 2],['messageDelete', 1, 0, 2, true],['guildUpdate', 1, 3, 3],['guildMemberUpdate', 1, 3, 4],['presenceUpdate', 1, 3, 4],['voiceStateUpdate', 1, 3, 4],['channelUpdate', 1, 3, 4, true],['channelPinsUpdate', 1, 0, 2, true],['roleUpdate', 1, 3, 4],['messageUpdate', 1, 3, 4, true, 'arg2.content.length === 0'],['emojiUpdate', 1, 3, 4],[],[],['messageReactionRemoveAll', 1, 0, 2, true],['guildMemberAvailable', 1, 0, 2],['guildMembersChunk', 1, 0, 3],['guildMemberSpeaking', 1, 3, 2],[],[],['guildUnavailable', 1, 0, 1]
 ];
 
 Events.registerEvents = function(bot) {
@@ -1061,10 +1061,10 @@ Images.createBuffer = function(image) {
 Images.drawImageOnImage = function(img1, img2, x, y) {
 	for(let i = 0; i < img2.bitmap.width; i++) {
 		for(let j = 0; j < img2.bitmap.height; j++) {
-			var pos = (i * (img2.bitmap.width * 4)) + (j * 4);
-			var pos2 = ((i + y) * (img1.bitmap.width * 4)) + ((j + x) * 4);
-			var target = img1.bitmap.data;
-			var source = img2.bitmap.data;
+			const pos = (i * (img2.bitmap.width * 4)) + (j * 4);
+			const pos2 = ((i + y) * (img1.bitmap.width * 4)) + ((j + x) * 4);
+			const target = img1.bitmap.data;
+			const source = img2.bitmap.data;
 			for(let k = 0; k < 4; k++) {
 				target[pos2 + k] = source[pos + k];
 			}
@@ -1092,11 +1092,18 @@ Files.dataFiles = [
 	'globalVars.json'
 ];
 
-Files.initStandalone = function() {
+Files.startBot = function() {
 	const fs = require('fs');
 	const path = require('path');
-	Actions.location = path.join(process.cwd(), 'actions');
-	if(fs.existsSync(Actions.location)) {
+	if(process.env['IsDiscordBotMakerTest'] === 'true') {
+		Actions.location = process.env['ActionsDirectory'];
+		this.initBotTest();
+	} else if(process.argv.length >= 3 && fs.existsSync(process.argv[2])) {
+		Actions.location = process.argv[2];
+	} else {
+		Actions.location = path.join(process.cwd(), 'actions')
+	}
+	if(typeof Actions.location === 'string' && fs.existsSync(Actions.location)) {
 		Actions.initMods();
 		this.readData(Bot.init.bind(Bot));
 	} else {
@@ -1105,23 +1112,17 @@ Files.initStandalone = function() {
 };
 
 Files.initBotTest = function(content) {
-	if(content) {
-		Actions.location = String(content);
-		Actions.initMods();
-		this.readData(Bot.init.bind(Bot));
+	this._console_log = console.log;
+	console.log = function() {
+		process.send(String(arguments[0]));
+		Files._console_log.apply(this, arguments);
+	};
 
-		const _console_log = console.log;
-		console.log = function() {
-			process.send(String(arguments[0]));
-			_console_log.apply(this, arguments);
-		};
-
-		const _console_error = console.error;
-		console.error = function() {
-			process.send(String(arguments[0]));
-			_console_error.apply(this, arguments);
-		};
-	}
+	this._console_error = console.error;
+	console.error = function() {
+		process.send(String(arguments[0]));
+		Files._console_error.apply(this, arguments);
+	};
 };
 
 Files.readData = function(callback) {
@@ -1673,14 +1674,4 @@ DiscordJS.Emoji.prototype.convertToString = function() {
 // Start Bot
 //---------------------------------------------------------------------
 
-if(!process.send) {
-
-Files.initStandalone();
-
-} else {
-
-process.on('message', function(content) {
-	Files.initBotTest(content);
-});
-
-}
+Files.startBot();
