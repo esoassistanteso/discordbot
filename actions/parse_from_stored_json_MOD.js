@@ -1,6 +1,6 @@
 module.exports = {
 	//---------------------------------------------------------------------
-	// Created by Mrs.Ahlfs
+	// Created by General Wrex
 	// Add URL to json object,
 	// add path to the object you want from the json
 	// set your variable type and name
@@ -36,7 +36,7 @@ module.exports = {
 		 //---------------------------------------------------------------------
 
 		 // Who made the mod (If not set, defaults to "DBM Mods")
-		 author: "Mrs.Ahlfs",
+		 author: "General Wrex",
 
 		 // The version of the mod (Defaults to 1.0.0)
 		 version: "1.8.2",
@@ -108,7 +108,7 @@ module.exports = {
 		<div>
 					<p>
 						<u>Mod Info:</u><br>
-						Created by Mrs.Ahlfs!
+						Created by General Wrex!
 					</p>
 				</div>
 			<div>

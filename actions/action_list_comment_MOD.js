@@ -24,7 +24,7 @@ section: "Other Stuff",
 	 //---------------------------------------------------------------------
 
 	 // Who made the mod (If not set, defaults to "DBM Mods")
-	 author: "Mrs.Ahlfs",
+	 author: "General Wrex",
 
 	 // The version of the mod (Defaults to 1.0.0)
 	 version: "1.8.2",
@@ -78,7 +78,7 @@ html: function(isEvent, data) {
 	<div>
 		<p>
 			<u>Mod Info:</u><br>
-			Created by Mrs.Ahlfs!<br><br>
+			Created by General Wrex!<br><br>
 			This will leave a comment in the right side of the action list where the action info is.<br>
 			It automatically calls the next action in the list.<br><br>
 			<b>This still counts as an Action, the action number still applies.</b>

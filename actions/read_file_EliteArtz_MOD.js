@@ -96,7 +96,7 @@ html: function(isEvent, data) {
         Created by EliteArtz<br><br>
 
         <u>Notice:</u><br>
-        - Use currently "Parse from Stored Json" Mod by Mrs.Ahlfs. for getting Json object's etc<br>
+        - Use currently "Parse from Stored Json" Mod by General Wrex. for getting Json object's etc<br>
         - Find Json Object's etc will added soon!<br>
         - The Files can only be read when they are in the bot files. e.g. "./data/commands.json"<br>
     </p>

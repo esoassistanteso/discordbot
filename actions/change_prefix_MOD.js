@@ -34,7 +34,7 @@ subtitle: function(data) {
 	 //---------------------------------------------------------------------
 
 	 // Who made the mod (If not set, defaults to "DBM Mods")
-	 author: "EliteArtz & Mrs.Ahlfs",
+	 author: "EliteArtz & General Wrex",
 
 	 // The version of the mod (Defaults to 1.0.0)
 	 version: "1.8.4",
@@ -90,7 +90,7 @@ html: function(isEvent, data) {
 	</p>
     <p>
         <u>Thanks to:</u><br>
-        Mrs.Ahlfs for helping with scripting<br>
+        General Wrex for helping with scripting<br>
     </p>
     Change Prefix to:<br>
 	<textarea id="pprefix" class="round" style="width: 40%; resize: none;" type="textarea" rows="1" cols="20"></textarea><br><br>
