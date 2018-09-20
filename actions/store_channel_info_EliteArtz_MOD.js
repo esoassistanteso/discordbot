@@ -24,7 +24,7 @@ section: "Channel Control",
 
 subtitle: function(data) {
 	const channels = ['Same Channel', 'Mentioned Channel', '1st Server Channel', 'Temp Variable', 'Server Variable', 'Global Variable'];
-	const info = ['Channel Creation Date', 'On which Server is Channel?', 'Channel Is Deleteable?', 'Channel Category', 'Channel Type'];
+	const info = ['Channel Creation Date', 'On which Server is Channel?', 'Channel Is Deleteable?', 'Channel Category'];
 	return `${channels[parseInt(data.channel)]} - ${info[parseInt(data.info)]}`;
 },
 
@@ -73,8 +73,6 @@ variableStorage: function(data, varType) {
 		case 3:
 			dataType = "Category";
 			break;
-		case 4:
-			dataType = "Text";
 	}
 	return ([data.varName2, dataType]);
 },
@@ -133,7 +131,6 @@ html: function(isEvent, data) {
 			<option value="1">On which Server is Channel?</option>
 			<option value="2">Channel Is Deleteable?</option>
 			<option value="3">Channel Category</option>
-			<option value="4">Channel Type</option>
 		</select>
 	</div>
 </div><br>
@@ -196,9 +193,6 @@ action: function(cache) {
 			break;
 		case 3:
 			result = targetChannel.parent;
-			break;
-		case 4:
-			result = targetChannel.type;
 			break;
 		default:
 			break;

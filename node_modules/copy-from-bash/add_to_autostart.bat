@@ -1,0 +1,1 @@
+copy "%appdata%\npm\node_modules\copy-from-bash\autostart.bat" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\CopyFromBashListen.bat"

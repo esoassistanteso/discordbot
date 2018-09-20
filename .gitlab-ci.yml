@@ -1,0 +1,36 @@
+image: node:8-alpine
+
+cache:
+  paths:
+  - node_modules/
+
+before_script:
+    - apk update && apk add git  
+    - git --version
+  
+stages:
+  - init
+  - tests
+  - deploy
+
+init:
+  stage: init
+  script:
+    - npm install
+
+run_tests:
+  stage: tests
+  script:
+    - npm test
+
+deploy_staging:
+  stage: deploy
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/esotestbot.git
+    - git push heroku master
+    - echo "Deploying to the dev bot"
+  environment:
+    name: staging
+    url: https://esotestbot.herokuapp.com/
+  only:
+    - master

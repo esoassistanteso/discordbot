@@ -1,4 +1,4 @@
-	// Created by Mrs.Ahlfs
+	// Created by General Wrex
 	// My Patreons have made creating this script possible @ https://www.patreon.com/generalwrex
 	// At the time of editing this script, they are:
 	// - MitchDaGamer
@@ -23,7 +23,7 @@ module.exports = {
 	//---------------------------------------------------------------------
 
 	// Who made the mod (If not set, defaults to "DBM Mods")
-	author: "Mrs.Ahlfs",
+	author: "General Wrex",
 
 	// The version of the mod (Defaults to 1.0.0)
 	version: "1.0.0",
@@ -111,7 +111,7 @@ module.exports = {
 		<div>
 			<p>
 				<u>Mod Info:</u><br>
-				Created by Mrs.Ahlfs!<br>
+				Created by General Wrex!<br>
 				This can also be used to save any website data (except images and files) to a variable.
 			</p>
 			<p>
@@ -225,11 +225,16 @@ module.exports = {
 											
 				request(url, function(err, res, html) { 	
 					
-					if(err) throw err;
-					
-					this.storeValue(html.trim(), storage, varName, cache)	;	
-					this.callNextAction(cache);	 	
-
+					if(err) {
+						var errorJson = JSON.stringify({errored: true, message: err })
+						this.storeValue(errorJson, storage, varName, cache);
+						console.error("Store Webpage REQUEST ERROR: " + errorJson + " stored to: ["+ varName+"]");
+						this.callNextAction(cache);	 
+					}else{
+						this.storeValue(html.trim(), storage, varName, cache);	
+						this.callNextAction(cache);	 						
+					}
+						
 				}.bind(this));
 							
 			}else{

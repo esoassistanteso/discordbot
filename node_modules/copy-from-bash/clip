@@ -1,0 +1,19 @@
+#!/bin/bash
+read msg
+if [ "$msg" == "" ] || [ "$1" == "help" ]
+then
+	echo "usage: output | clip [timer]"
+	echo "default timer is 45 (seconds), 0 will be infinte"
+fi 
+if [ "$1" == "" ]
+then
+	TIME=45
+else
+	TIME=$1
+fi
+if [ "$TIME" -eq 0 ]
+then
+	copyfb sent --text "$msg"
+else
+	copyfb sent --text "$msg" --timer "$TIME"
+fi
