@@ -225,16 +225,11 @@ module.exports = {
 											
 				request(url, function(err, res, html) { 	
 					
-					if(err) {
-						var errorJson = JSON.stringify({errored: true, message: err })
-						this.storeValue(errorJson, storage, varName, cache);
-						console.error("Store Webpage REQUEST ERROR: " + errorJson + " stored to: ["+ varName+"]");
-						this.callNextAction(cache);	 
-					}else{
-						this.storeValue(html.trim(), storage, varName, cache);	
-						this.callNextAction(cache);	 						
-					}
-						
+					if(err) throw err;
+					
+					this.storeValue(html.trim(), storage, varName, cache)	;	
+					this.callNextAction(cache);	 	
+
 				}.bind(this));
 							
 			}else{

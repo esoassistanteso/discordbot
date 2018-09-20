@@ -6,7 +6,7 @@ module.exports = {
 // This is the name of the action displayed in the editor.
 //---------------------------------------------------------------------
 
-name: "Send Message to Console",
+name: "Check DBL Voted",
 
 //---------------------------------------------------------------------
 // Action Section
@@ -14,21 +14,10 @@ name: "Send Message to Console",
 // This is the section the action will fall into.
 //---------------------------------------------------------------------
 
-section: "Other Stuff",
+section: "Conditions",
 
 //---------------------------------------------------------------------
-// Action Subtitle
-//
-// This function generates the subtitle displayed next to the name.
-//---------------------------------------------------------------------
-
-subtitle: function(data) {
-	return `${data.tosend}`;
-},
-
-
-//---------------------------------------------------------------------
-// DBM Mods Manager Variables (Optional but nice to have!)
+// DBM Mods Manager Variables
 //
 // These are variables that DBM Mods Manager uses to show information
 // about the mods for people to see in the list.
@@ -38,15 +27,21 @@ subtitle: function(data) {
 author: "Lasse",
 
 // The version of the mod (Defaults to 1.0.0)
-version: "1.8.2",
+version: "1.8.9",
 
 // A short description to show on the mod line for this mod (Must be on a single line)
-short_description: "Sends a message to the console",
-
-// If it depends on any other mods by name, ex: WrexMODS if the mod uses something from WrexMods
-
+short_description: "Check Voted Status of User on DBL",
 
 //---------------------------------------------------------------------
+// Action Subtitle
+//
+// This function generates the subtitle displayed next to the name.
+//---------------------------------------------------------------------
+
+subtitle: function(data) {
+	const results = ["Continue Actions", "Stop Action Sequence", "Jump To Action", "Jump Forward Actions"];
+	return `If True: ${results[parseInt(data.iftrue)]} ~ If False: ${results[parseInt(data.iffalse)]}`;
+},
 
 //---------------------------------------------------------------------
 // Action Fields
@@ -56,7 +51,7 @@ short_description: "Sends a message to the console",
 // are also the names of the fields stored in the action's JSON data.
 //---------------------------------------------------------------------
 
-fields: ["tosend"],
+fields: ["member", "apitoken", "varName", "iftrue", "iftrueVal", "iffalse", "iffalseVal"],
 
 //---------------------------------------------------------------------
 // Command HTML
@@ -76,15 +71,27 @@ fields: ["tosend"],
 
 html: function(isEvent, data) {
 	return `
+	<div><p><u>Mod Info:</u><br>Created by Lasse!<br>Idea by CmdData</p></div><br>
 	<div>
-		<p>
-			<u>Mod Info:</u><br>
-			Created by Lasse!
-		</p>
-	</div><br>
+		<div style="float: left; width: 35%;">
+			Source Member:<br>
+			<select id="member" class="round" onchange="glob.memberChange(this, 'varNameContainer')">
+				${data.members[isEvent ? 1 : 0]}
+			</select>
+		</div>
+		<div id="varNameContainer" style="display: none; float: right; width: 60%;">
+			Variable Name:<br>
+			<input id="varName" class="round" type="text" list="variableList"><br>
+		</div>
+	</div><br><br><br>
+<div>
+	<div style="float: left; width: 89%;">
+		DBL API Token:<br>
+		<input id="apitoken" class="round" type="text">
+	</div>
+</div><br><br><br>
 <div style="padding-top: 8px;">
-	Message to send:<br>
-	<textarea id="tosend" rows="4" style="width: 99%; font-family: monospace; white-space: nowrap; resize: none;"></textarea>
+	${data.conditions[0]}
 </div>`
 },
 
@@ -96,7 +103,13 @@ html: function(isEvent, data) {
 // functions for the DOM elements.
 //---------------------------------------------------------------------
 
-init: function() {},
+init: function() {
+	const {glob, document} = this;
+
+	glob.memberChange(document.getElementById('member'), 'varNameContainer');
+	glob.onChangeTrue(document.getElementById('iftrue'));
+	glob.onChangeFalse(document.getElementById('iffalse'));
+},
 
 //---------------------------------------------------------------------
 // Action Bot Function
@@ -108,9 +121,23 @@ init: function() {},
 
 action: function(cache) {
 	const data = cache.actions[cache.index];
-	const send = this.evalMessage(data.tosend, cache);
-	console.log(send);
-	this.callNextAction(cache);
+	const userid = this.evalMessage(data.userid, cache);
+	const apitoken = this.evalMessage(data.apitoken, cache);
+	const type = parseInt(data.member);
+	const varName = this.evalMessage(data.varName, cache);
+	const member = this.getMember(type, varName, cache);
+
+	const WrexMODS = this.getWrexMods();
+	const DBL = WrexMODS.require('dblapi.js');
+	const dbl = new DBL(apitoken);
+
+	if(!apitoken) {
+		console.log('ERROR! Please provide an API token for DBL!');
+	}
+
+	dbl.hasVoted(member.user.id).then(voted => {
+		this.executeResults(voted, data, cache);
+	});
 },
 
 //---------------------------------------------------------------------

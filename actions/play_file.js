@@ -133,8 +133,8 @@ action: function(cache) {
 		const info = ['file', options, url];
 		if(data.type === "0") {
 			Audio.addToQueue(info, cache);
-		} else {
-			Audio.playItem(info, cache);
+		} else if(cache.server && cache.server.id !== undefined) {
+			Audio.playItem(info, cache.server.id);
 		}
 	}
 	this.callNextAction(cache);

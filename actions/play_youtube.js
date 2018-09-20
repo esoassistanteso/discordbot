@@ -64,7 +64,7 @@ html: function(isEvent, data) {
 	return `
 <div>
 	YouTube URL:<br>
-	<input id="url" class="round" type="text" value="https://www.youtube.com/watch?v=q6EoRBvdVPQ"><br>
+	<input id="url" class="round" type="text" value="https://www.youtube.com/watch?v=2zgcFFvEA9g"><br>
 </div>
 <div style="float: left; width: 50%;">
 	Seek Position:<br>
@@ -133,8 +133,8 @@ action: function(cache) {
 		const info = ['yt', options, url];
 		if(data.type === "0") {
 			Audio.addToQueue(info, cache);
-		} else {
-			Audio.playItem(info, cache);
+		} else if(cache.server && cache.server.id !== undefined) {
+			Audio.playItem(info, cache.server.id);
 		}
 	}
 	this.callNextAction(cache);

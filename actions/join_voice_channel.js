@@ -98,9 +98,13 @@ action: function(cache) {
 	const type = parseInt(data.channel);
 	const varName = this.evalMessage(data.varName, cache);
 	const channel = this.getVoiceChannel(type, varName, cache);
-	Audio.connectToVoice(channel).then(function() {
+	if(channel !== undefined) {
+		Audio.connectToVoice(channel).then(function() {
+			this.callNextAction(cache);
+		}.bind(this));
+	} else {
 		this.callNextAction(cache);
-	}.bind(this));
+	}
 },
 
 //---------------------------------------------------------------------

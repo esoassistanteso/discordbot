@@ -106,7 +106,7 @@ action: function(cache) {
 	let actions;
 	const allData = Files.data.events;
 	for(let i = 0; i < allData.length; i++) {
-		if(allData[i] && allData[i]._id === id) {
+		if(allData[i]._id === id) {
 			actions = allData[i].actions;
 			break;
 		}
